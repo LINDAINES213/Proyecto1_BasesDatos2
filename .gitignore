@@ -1,0 +1,8 @@
+__pycache__/*
+pyvenv.cfg
+*.pyc*
+*.cpython-311.pyc*
+*.cpython*
+node_modules/
+Scripts/*
+Lib/*
