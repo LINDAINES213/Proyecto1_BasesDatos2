@@ -33,6 +33,9 @@ function App() {
         password
       }).then(() => {
         fetchData();
+        setName('');
+        setEmail('');
+        setPassword('');
       });
     } else {
       axios.put(`http://127.0.0.1:5000/${id}`, {
@@ -41,9 +44,13 @@ function App() {
         password
       }).then(() => {
         fetchData();
+        setName('');
+        setEmail('');
+        setPassword('');
       });
     }
   };
+  
 
   const deleteData = (id) => {
     axios.delete(`http://127.0.0.1:5000/${id}`)
@@ -92,7 +99,7 @@ function App() {
               <i className="material-icons prefix">vpn_key</i>
               <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder='Enter Password' />
             </div>
-            <button className="btn waves-effect waves-light right" type="submit" name="action">Submit
+            <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Submit
               <i className="material-icons right">send</i>
             </button>
           </form>
@@ -113,12 +120,12 @@ function App() {
                     <td>{user.email}</td>
                     <td>{user.password}</td>
                     <td>
-                      <button onClick={() => edit(user._ID)} className="btn waves-effect waves-light" type="submit" name="action">
+                      <button onClick={() => edit(user._ID)} className="btn btn-sm btn-primary" type="submit" name="action">
                         <i className="material-icons ">edit</i>
                       </button>
                     </td>
                     <td>
-                      <button onClick={() => deleteData(user._ID)} className="btn waves-effect waves-light " type="submit" name="action">
+                      <button onClick={() => deleteData(user._ID)} className="btn btn-sm btn-danger waves-light " type="submit" name="action">
                         <i className="material-icons ">delete</i>
                       </button>
                     </td>
