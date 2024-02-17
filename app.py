@@ -6,9 +6,11 @@ import json
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/demo2"
+#app.config["MONGO_URI"] = "mongodb+srv://grupoDinamita:GrupoDinamita3@proyecto01.dge4zeo.mongodb.net/Cook_recipes"
 mongo = PyMongo(app)
 CORS(app)
 
+#db = mongo.db.international_recipes
 db = mongo.db.demo2
 
 @app.route("/", methods=["GET", "POST"])
@@ -35,3 +37,9 @@ def deleteput(id):
             "password": request.json["password"]
         }})
         return jsonify({"message": "Updated"})
+    
+@app.route('/edit/<id>', methods=["GET"])
+def edit(id):
+    res = db.find_one({"_id": ObjectId(id)})
+    print(res)
+    return {"_ID": str(ObjectId(res["_id"])), "name":res["name"], "email":res["email"], "password":res["password"]}
