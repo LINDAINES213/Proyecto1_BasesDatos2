@@ -11,7 +11,7 @@ function App() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:5000")
+    axios.get("http://127.0.0.1:5000/ver")
       .then((res) => {
         setUsers(res.data);
         setId(0);
@@ -27,7 +27,7 @@ function App() {
   const submit = (event, id) => {
     event.preventDefault();
     if (id === 0) {
-      axios.post("http://127.0.0.1:5000", {
+      axios.post("http://127.0.0.1:5000/ver", {
         name,
         email,
         password
@@ -72,7 +72,7 @@ function App() {
 
 
   const fetchData = () => {
-    axios.get("http://127.0.0.1:5000")
+    axios.get("http://127.0.0.1:5000/ver")
       .then((res) => {
         setUsers(res.data);
       })

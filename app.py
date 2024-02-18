@@ -13,7 +13,11 @@ CORS(app)
 #db = mongo.db.international_recipes
 db = mongo.db.demo2
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
+def root():
+    return jsonify({"message": "Hello World"})
+
+@app.route("/ver", methods=["GET", "POST"])
 def getpost():
     if request.method == "GET":
         o = []
