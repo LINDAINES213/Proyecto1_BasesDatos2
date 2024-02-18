@@ -15,7 +15,7 @@ db = mongo.db.demo2
 
 @app.route("/", methods=["GET"])
 def root():
-    return jsonify({"message": "Hello World"})
+    return jsonify({"message": "Funcionanding"})
 
 @app.route("/ver", methods=["GET", "POST"])
 def getpost():
