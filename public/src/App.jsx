@@ -11,7 +11,7 @@ function App() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:5000/ver")
+    axios.get("https://proyecto1bd.onrender.com/ver")
       .then((res) => {
         setUsers(res.data);
         setId(0);
@@ -27,7 +27,7 @@ function App() {
   const submit = (event, id) => {
     event.preventDefault();
     if (id === 0) {
-      axios.post("http://127.0.0.1:5000/ver", {
+      axios.post("https://proyecto1bd.onrender.com/ver", {
         name,
         email,
         password
@@ -38,7 +38,7 @@ function App() {
         setPassword('');
       });
     } else {
-      axios.put(`http://127.0.0.1:5000/${id}`, {
+      axios.put(`https://proyecto1bd.onrender.com/${id}`, {
         name,
         email,
         password
@@ -53,14 +53,14 @@ function App() {
   
 
   const deleteData = (id) => {
-    axios.delete(`http://127.0.0.1:5000/${id}`)
+    axios.delete(`https://proyecto1bd.onrender.com/${id}`)
       .then(() => {
         fetchData();
       });
   };
 
   const edit = (id) => {
-    axios.get(`http://127.0.0.1:5000/edit/${id}`)
+    axios.get(`https://proyecto1bd.onrender.com/edit/${id}`)
       .then((res) => {
         setName(res.data.name),
         setEmail(res.data.email),
@@ -72,7 +72,7 @@ function App() {
 
 
   const fetchData = () => {
-    axios.get("http://127.0.0.1:5000/ver")
+    axios.get("https://proyecto1bd.onrender.com/ver")
       .then((res) => {
         setUsers(res.data);
       })

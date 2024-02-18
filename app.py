@@ -5,7 +5,7 @@ from bson import ObjectId
 import json
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/demo2"
+app.config["MONGO_URI"] = "mongodb+srv://grupoDinamita:GrupoDinamita3@lab03.sutnr1c.mongodb.net/demo2"
 #app.config["MONGO_URI"] = "mongodb+srv://grupoDinamita:GrupoDinamita3@proyecto01.dge4zeo.mongodb.net/Cook_recipes"
 mongo = PyMongo(app)
 CORS(app)
