@@ -13,5 +13,6 @@ MarkupSafe==2.1.2
 pip==24.0
 pymongo==4.6.1
 setuptools==69.0.3
+uvicorn==0.24.0.post1
 Werkzeug==3.0.0
 Wheel==0.42.0
