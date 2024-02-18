@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: { browser: true, es2020: true, node: true },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -16,6 +16,18 @@ module.exports = {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
+    ],
+    semi: ['error', 'never'],
+    'max-len': [
+      'warn',
+      {
+        code: 150,
+        tabWidth: 2,
+      },
+    ],
+    'react/function-component-definition': [
+      2,
+      { namedComponents: 'arrow-function' },
     ],
   },
 }

@@ -1,63 +1,62 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
 
+// eslint-disable-next-line react/function-component-definition
 function App() {
-
-  const [users, setUsers] = useState([]);
-  const [id, setId] = useState(0);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [users, setUsers] = useState([])
+  const [id, setId] = useState(0)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   useEffect(() => {
     axios.get("https://proyecto1bd.onrender.com/ver")
       .then((res) => {
-        setUsers(res.data);
-        setId(0);
-        setName('');
-        setEmail('');
-        setPassword('');
+        setUsers(res.data)
+        setId(0)
+        setName('')
+        setEmail('')
+        setPassword('')
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
+        console.error('Error fetching data:', error)
+      })
+  }, [])
 
   const submit = (event, id) => {
-    event.preventDefault();
+    event.preventDefault()
     if (id === 0) {
       axios.post("https://proyecto1bd.onrender.com/ver", {
         name,
         email,
         password
       }).then(() => {
-        fetchData();
-        setName('');
-        setEmail('');
-        setPassword('');
-      });
+        fetchData()
+        setName('')
+        setEmail('')
+        setPassword('')
+      })
     } else {
       axios.put(`https://proyecto1bd.onrender.com/${id}`, {
         name,
         email,
         password
       }).then(() => {
-        fetchData();
-        setName('');
-        setEmail('');
-        setPassword('');
-      });
+        fetchData()
+        setName('')
+        setEmail('')
+        setPassword('')
+      })
     }
-  };
+  }
   
-
   const deleteData = (id) => {
     axios.delete(`https://proyecto1bd.onrender.com/${id}`)
       .then(() => {
-        fetchData();
-      });
-  };
+        fetchData()
+      })
+  }
 
   const edit = (id) => {
     axios.get(`https://proyecto1bd.onrender.com/edit/${id}`)
@@ -66,21 +65,18 @@ function App() {
         setEmail(res.data.email),
         setPassword(res.data.password),
         setId(res.data._ID)
-      });
-  };
-
-
+      })
+  }
 
   const fetchData = () => {
     axios.get("https://proyecto1bd.onrender.com/ver")
       .then((res) => {
-        setUsers(res.data);
+        setUsers(res.data)
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  };
-
+        console.error('Error fetching data:', error)
+      })
+  }
 
   return (
   <div className='container mt-5'>
