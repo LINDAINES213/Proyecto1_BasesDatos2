@@ -6,3 +6,4 @@ pyvenv.cfg
 node_modules/
 Scripts/*
 Lib/*
+.vscode/*
