@@ -11,7 +11,7 @@ function App() {
   const handleMenuSelect = (item) => {
     setSelectedMenuItem(item)
   }
-  
+
   return (
     <div className="app">
       <Sidebar onSelect={handleMenuSelect} />
@@ -20,12 +20,12 @@ function App() {
         {selectedMenuItem === 'Acerca de' && <p>Contenido relacionado con Acerca de.</p>}
         {selectedMenuItem === 'Servicios' && <p>Contenido relacionado con Servicios.</p>}
         {selectedMenuItem === 'Contacto' && <p>Contenido relacionado con Contacto.</p>}
-        {selectedMenuItem === 'Basic Operations' && <CRUDoperations />}
+        {selectedMenuItem === 'Información' && <CRUDoperations />}
         {selectedMenuItem !== 'Inicio' &&
          selectedMenuItem !== 'Acerca de' &&
          selectedMenuItem !== 'Servicios' &&
          selectedMenuItem !== 'Contacto' &&
-         selectedMenuItem !== 'Basic Operations' && <p>Contenido no definido.</p>}
+         selectedMenuItem !== 'Información' && <p>Contenido no definido.</p>}
       </Content>
     </div>
   )

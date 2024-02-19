@@ -4,7 +4,7 @@ import { sidebar } from './Sidebar.module.css'
 
 // Componente para el menú lateral
 const Sidebar = ({ onSelect }) => {
-  const menuItems = ['Inicio', 'Acerca de', 'Servicios', 'Contacto', 'Basic Operations']
+  const menuItems = ['Inicio', 'Acerca de', 'Servicios', 'Contacto', 'Información']
   return (
     <div className={sidebar}>
       <ul>

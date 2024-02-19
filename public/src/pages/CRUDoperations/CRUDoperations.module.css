@@ -1,3 +1,95 @@
-crud {
-    padding: 20px;
+.crud {
+    padding: 0px;
 }
+
+.buttonContainer {
+    margin-left: 0.5vw;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
+.inputContainer button {
+    background-color: rgb(8, 33, 227);
+}
+
+
+.inputText {
+    border: 3px solid #ff0000;
+    border-radius: 5px; /* Ajusta el valor según sea necesario para obtener el radio deseado */
+    width: 20vw;
+    padding: 5px;
+    color: #ff0000;
+    background-color: rgb(255, 255, 255);
+    box-sizing:content-box;
+    margin-left: 0.5vw;
+}
+
+input:focus {
+    border: 3px solid #ba0101;
+    outline: none;
+}
+
+h3 {
+    margin-top: 0;
+    margin-bottom: 2vh;
+    display: inline-block; 
+    border-bottom: 3px solid #ff0000; /* Añade la línea de subrayado más gruesa en el enfoque */
+
+}
+
+button {
+    background-color:  #ff0000;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  
+
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center; /* Centra horizontalmente el contenido */
+  }
+
+  /* Alineación a la izquierda para celdas específicas */
+  td.leftAligned {
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* Estilos para los botones dentro de la tabla */
+  table button {
+    padding: 5px 10px;
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+    margin: auto; /* Asegura el centrado horizontal */
+  }
+
+.editButton {
+    background-color:  rgb(8, 33, 227);
+}
+
+  
+  /* Estilos específicos para los íconos dentro de los botones */
+  table button i {
+    margin-right: 5px;
+  }
+  
