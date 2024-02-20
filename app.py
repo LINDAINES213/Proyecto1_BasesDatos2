@@ -5,6 +5,7 @@ from bson import ObjectId
 import json
 
 from routes.users_collection import users_bp
+from routes.restaurants_collection import restaurants_bp
 
 
 app = Flask(__name__)
@@ -14,6 +15,7 @@ mongo = PyMongo(app)
 CORS(app)
 
 app.register_blueprint(users_bp)
+app.register_blueprint(restaurants_bp)
 
 db = mongo.db.demo2
 
