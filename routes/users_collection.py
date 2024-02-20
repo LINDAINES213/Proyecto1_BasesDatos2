@@ -3,7 +3,7 @@ from bson import ObjectId
 
 users_bp = Blueprint('users', __name__)
 
-@users_bp.route("/ver", methods=["GET", "POST"])
+@users_bp.route("/users", methods=["GET", "POST"])
 def getpost():
     from app import mongo
     db = mongo.db.users
@@ -13,11 +13,11 @@ def getpost():
             o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender":i["gender"], "country":i["country"], "contact":i["contact"]})
         return jsonify(o)
     elif request.method == "POST":
-        id = db.insert_one({"name": request.json["name"], "age": request.json["age"], "gender": request.json["gender"], "country": request.json["country"], "contact": request.json["contact"]})
+        id = db.insert_one({"name": request.json["name"], "age": request.json["age"], "gender": request.json["gender"], "country": request.json["country"], "contact": {"email": request.json["contact"]["email"], "phone": request.json["contact"]["phone"]}})
         inserted_id = id.inserted_id
         return jsonify({"_id": str(inserted_id)})
         
-@users_bp.route('/<id>', methods=["DELETE", "PUT"])
+@users_bp.route('/users/<id>', methods=["DELETE", "PUT"])
 def deleteput(id):
     from app import mongo
     db = mongo.db.users
@@ -30,12 +30,12 @@ def deleteput(id):
             "age": request.json["age"],
             "gender": request.json["gender"],
             "country": request.json["country"],
-            "contact": request.json["contact"]
+            "contact": {"email": request.json["contact"]["email"], "phone": request.json["contact"]["phone"]}
         }})
         return jsonify({"message": "Updated"})
     
-@users_bp.route('/edit/<id>', methods=["GET"])
-def edit(id):
+@users_bp.route('/editusers/<id>', methods=["GET"])
+def editusers(id):
     from app import mongo
     db = mongo.db.users
     res = db.find_one({"_id": ObjectId(id)})
