@@ -13,7 +13,7 @@ const CRUDoperations = () => {
   const [contact, setContact] = useState('')
 
   useEffect(() => {
-    axios.get("https://proyecto1bd.onrender.com/ver")
+    axios.get("https://proyecto1bd.onrender.com/users")
       .then((res) => {
         setUsers(res.data)
         setId(0)
@@ -31,7 +31,7 @@ const CRUDoperations = () => {
   const submit = (event, id) => {
     event.preventDefault()
     if (id === 0) {
-      axios.post("https://proyecto1bd.onrender.com/ver", {
+      axios.post("https://proyecto1bd.onrender.com/users", {
         name,
         age,
         gender,
@@ -46,7 +46,7 @@ const CRUDoperations = () => {
         setContact('')
       })
     } else {
-      axios.put(`https://proyecto1bd.onrender.com/${id}`, {
+      axios.put(`https://proyecto1bd.onrender.com/users/${id}`, {
         name,
         age,
         gender,
@@ -64,14 +64,14 @@ const CRUDoperations = () => {
   }
   
   const deleteData = (id) => {
-    axios.delete(`https://proyecto1bd.onrender.com/${id}`)
+    axios.delete(`https://proyecto1bd.onrender.com/users/${id}`)
       .then(() => {
         fetchData()
       })
   }
 
-  const edit = (id) => {
-    axios.get(`https://proyecto1bd.onrender.com/edit/${id}`)
+  const editusers = (id) => {
+    axios.get(`https://proyecto1bd.onrender.com/editusers/${id}`)
       .then((res) => {
         setName(res.data.name),
         setAge(res.data.age),
@@ -83,7 +83,7 @@ const CRUDoperations = () => {
   }
 
   const fetchData = () => {
-    axios.get("https://proyecto1bd.onrender.com/ver")
+    axios.get("https://proyecto1bd.onrender.com/users")
       .then((res) => {
         setUsers(res.data)
       })
@@ -141,7 +141,7 @@ const CRUDoperations = () => {
                     <td>{user.contact.email}</td> {/* Mostrar el email */}
                     <td>{user.contact.phone}</td> {/* Mostrar el teléfono */}
                     <td>
-                      <button onClick={() => edit(user._ID)} className={editButton} type="submit" name="action">
+                      <button onClick={() => editusers(user._ID)} className={editButton} type="submit" name="action">
                         <i className="material-icons ">edit</i>
                       </button>
                     </td>
