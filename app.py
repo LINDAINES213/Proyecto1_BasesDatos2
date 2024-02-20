@@ -8,7 +8,7 @@ from routes.users_collection import users_bp
 
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb+srv://grupoDinamita:GrupoDinamita3@lab03.sutnr1c.mongodb.net/demo2"
+app.config["MONGO_URI"] = "mongodb+srv://grupoDinamita:GrupoDinamita3@lab03.sutnr1c.mongodb.net/Prueba1"
 #app.config["MONGO_URI"] = "mongodb+srv://grupoDinamita:GrupoDinamita3@proyecto01.dge4zeo.mongodb.net/Cook_recipes"
 mongo = PyMongo(app)
 CORS(app)

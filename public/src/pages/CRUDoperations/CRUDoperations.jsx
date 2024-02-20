@@ -7,8 +7,10 @@ const CRUDoperations = () => {
   const [users, setUsers] = useState([])
   const [id, setId] = useState(0)
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [age, setAge] = useState('')
+  const [gender, setGender] = useState('')
+  const [country, setCountry] = useState('')
+  const [contact, setContact] = useState('')
 
   useEffect(() => {
     axios.get("https://proyecto1bd.onrender.com/ver")
@@ -16,8 +18,10 @@ const CRUDoperations = () => {
         setUsers(res.data)
         setId(0)
         setName('')
-        setEmail('')
-        setPassword('')
+        setAge('')
+        setGender('')
+        setCountry('')
+        setContact('')
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -29,24 +33,32 @@ const CRUDoperations = () => {
     if (id === 0) {
       axios.post("https://proyecto1bd.onrender.com/ver", {
         name,
-        email,
-        password
+        age,
+        gender,
+        country,
+        contact
       }).then(() => {
         fetchData()
         setName('')
-        setEmail('')
-        setPassword('')
+        setAge('')
+        setGender('')
+        setCountry('')
+        setContact('')
       })
     } else {
       axios.put(`https://proyecto1bd.onrender.com/${id}`, {
         name,
-        email,
-        password
+        age,
+        gender,
+        country,
+        contact
       }).then(() => {
         fetchData()
         setName('')
-        setEmail('')
-        setPassword('')
+        setAge('')
+        setGender('')
+        setCountry('')
+        setContact('')
       })
     }
   }
@@ -62,8 +74,10 @@ const CRUDoperations = () => {
     axios.get(`https://proyecto1bd.onrender.com/edit/${id}`)
       .then((res) => {
         setName(res.data.name),
-        setEmail(res.data.email),
-        setPassword(res.data.password),
+        setAge(res.data.age),
+        setGender(res.data.gender),
+        setCountry(res.data.country),
+        setContact(res.data.contact),
         setId(res.data._ID)
       })
   }
@@ -90,11 +104,11 @@ const CRUDoperations = () => {
             </div>
             <div className={inputContainer}>
                 <i className="material-icons prefix">mail</i>
-                <input className={inputText} value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Email' />
+                <input className={inputText} value={age} onChange={(e) => setAge(e.target.value)} type="age" placeholder='age' />
             </div>
             <div className={inputContainer}>
                 <i className="material-icons prefix">vpn_key</i>
-                <input className={inputText} value={password} onChange={(e) => setPassword(e.target.value)} type="password"
+                <input className={inputText} value={gender} onChange={(e) => setGender(e.target.value)} type="gender"
                     placeholder='Contraseña' />
                 <div className={buttonContainer}>
                     <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Submit
@@ -109,8 +123,11 @@ const CRUDoperations = () => {
         <table className='table'>
           <thead>
             <th>Nombre</th>
+            <th>Edad</th>
+            <th>Genero</th>
+            <th>Pais</th>
             <th>Email</th>
-            <th>Contraseña</th>
+            <th>Telefono</th>
             <th>Editar</th>
             <th>Eliminar</th>
           </thead>
@@ -118,8 +135,11 @@ const CRUDoperations = () => {
             {users.map(user =>
                   <tr key={user._ID}>
                     <td className={leftAligned}>{user.name}</td>
-                    <td className={leftAligned}>{user.email}</td>
-                    <td>{user.password}</td>
+                    <td>{user.age}</td>
+                    <td>{user.gender}</td>
+                    <td>{user.country}</td>
+                    <td>{user.contact.email}</td> {/* Mostrar el email */}
+                    <td>{user.contact.phone}</td> {/* Mostrar el teléfono */}
                     <td>
                       <button onClick={() => edit(user._ID)} className={editButton} type="submit" name="action">
                         <i className="material-icons ">edit</i>
