@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "undefined/subscriptions/857b45ac-f6ad-471d-b7f2-2b76460a1528/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/proyectoBaseDatos2-GPDN",
-    "appService.deploySubpath": "."
-}
