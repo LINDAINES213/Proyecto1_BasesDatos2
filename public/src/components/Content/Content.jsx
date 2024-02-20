@@ -1,20 +1,20 @@
 // import React from 'react'
 import PropTypes from 'prop-types'
-// import from './Slidebar.module.css'
+import { content } from './Content.module.css'
 
 // Componente para el contenido principal
-const Content = ({ selectedMenuItem }) => {
-    return (
-      <div className="content">
-        <h2>{selectedMenuItem}</h2>
-        <p>Contenido relacionado con {selectedMenuItem}.</p>
-      </div>
-    )
-  }
+const Content = ({ selectedMenuItem, children }) => {
+  return (
+    <div className={content}>
+      <h1>{selectedMenuItem}</h1>
+      {children}
+    </div>
+  )
+}
 
-  // Definir PropTypes para el componente Sidebar
 Content.propTypes = {
-    selectedMenuItem: PropTypes.func.isRequired,
+  selectedMenuItem: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
 }
   
 

@@ -1,5 +1,3 @@
 import CRUDoperations from "./CRUDoperations"
 
-export {
-    CRUDoperations,
-}
+export default CRUDoperations
