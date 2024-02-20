@@ -1,13 +1,12 @@
 from flask import Blueprint, jsonify, request
 from bson import ObjectId
-from app import mongo
 
 users_bp = Blueprint('users', __name__)
 
-db = mongo.db.demo2
-
 @users_bp.route("/ver", methods=["GET", "POST"])
 def getpost():
+    from app import mongo
+    db = mongo.db.demo2
     if request.method == "GET":
         o = []
         for i in db.find():
@@ -20,6 +19,8 @@ def getpost():
         
 @users_bp.route('/<id>', methods=["DELETE", "PUT"])
 def deleteput(id):
+    from app import mongo
+    db = mongo.db.demo2
     if request.method == "DELETE":
         db.delete_one({"_id": ObjectId(id)})
         return jsonify({"message": "Deleted"})
@@ -33,6 +34,8 @@ def deleteput(id):
     
 @users_bp.route('/edit/<id>', methods=["GET"])
 def edit(id):
+    from app import mongo
+    db = mongo.db.demo2
     res = db.find_one({"_id": ObjectId(id)})
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "name":res["name"], "email":res["email"], "password":res["password"]}
