@@ -1,5 +1,8 @@
 from flask import Blueprint, jsonify, request
 from bson import ObjectId
+import ast
+import re
+
 
 recipes_bp = Blueprint('recipes', __name__)
 
@@ -14,7 +17,16 @@ def getpost():
             o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
         return jsonify(o)
     elif request.method == "POST":
-        restaurant_ids = [ObjectId(restaurant_id) for restaurant_id in request.json.get("restaurants", [])]
+        '''restaurant_ids = ast.literal_eval(request.json["restaurants"])
+        restaurant_ids = [ObjectId(r) for r in restaurant_ids]'''
+        restaurant_ids_str = request.json["restaurants"]
+
+        matches = re.findall(r"ObjectId\('(.*?)'", restaurant_ids_str)
+
+        object_ids = [m.strip('[') for m in matches]
+
+        restaurant_ids = [ObjectId(oid) for oid in object_ids]
+
         id = db.insert_one({"title": request.json["title"], "ingredients": request.json["ingredients"], "directions": request.json["directions"], "cook_time (min)": request.json["cook_time (min)"], "country": request.json["country"], "prep_time (min)": request.json["prep_time (min)"], "price ($)": request.json["price ($)"], "restaurants": restaurant_ids})
         inserted_id = id.inserted_id
         return jsonify({"_id": str(inserted_id)})
@@ -27,12 +39,18 @@ def deleteput(id):
         db.delete_one({"_id": ObjectId(id)})
         return jsonify({"message": "Deleted"})
     elif request.method == "PUT":
-        restaurant_id_str = request.json.get("restaurants")
-        if restaurant_id_str.startswith("[ObjectId('") and restaurant_id_str.endswith("')]"):
-            restaurant_id = restaurant_id_str[len("[ObjectId('"):-len("')]")]
-        else:
-            return jsonify({"error": "Invalid restaurants field format"}), 400
-        restaurant_id_obj = ObjectId(restaurant_id)
+        
+        '''restaurant_ids = ast.literal_eval(request.json["restaurants"])
+        restaurant_ids = [ObjectId(r) for r in restaurant_ids]'''
+
+        restaurant_ids_str = request.json["restaurants"]
+
+        matches = re.findall(r"ObjectId\('(.*?)'", restaurant_ids_str)
+
+        object_ids = [m.strip('[') for m in matches]
+
+        restaurant_ids = [ObjectId(oid) for oid in object_ids]
+
         db.update_one({"_id": ObjectId(id)}, {"$set":{
             "title": request.json["title"],
             "ingredients": request.json["ingredients"],
@@ -41,7 +59,7 @@ def deleteput(id):
             "country": request.json["country"],
             "prep_time (min)": request.json["prep_time (min)"],
             "price ($)": request.json["price ($)"],
-            "restaurants": restaurant_id_obj}})
+            "restaurants": restaurant_ids}})
         return jsonify({"message": "Updated"})
     
 @recipes_bp.route('/editrecipes/<id>', methods=["GET"])
