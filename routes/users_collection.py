@@ -47,7 +47,7 @@ def usuarios_por_pais():
     from app import mongo
     db = mongo.db.users
     pipeline = [
-        {"$group": {"_ID": "$country", "total": {"$sum": 1}}}
+        {"$group": {"_id": "$country", "total": {"$sum": 1}}}
     ]
     resultado = list(db.aggregate(pipeline))
     return jsonify(resultado)
