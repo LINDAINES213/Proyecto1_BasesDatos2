@@ -82,7 +82,7 @@ def total_sales_per_restaurant_month():
         }},
 
         {"$unwind": "$restaurant"},
-        {"$group": {"_id": "$restaurant.name", "month": {"$month": "date"}, "total_sales ($)": {"$sum": "$total ($)"}}},
+        {"$group": {"_id": "$restaurant.name", "month": {"$month": {"$toDate": "$date"}}, "total_sales ($)": {"$sum": "$total ($)"}}},
         {"$sort": {"total_sales": -1}},
         {"$limit": 10}
     ]
