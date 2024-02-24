@@ -40,3 +40,16 @@ def edit(id):
     res = db.find_one({"_id": ObjectId(id)})
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "name":res["name"], "country":res["country"], "stars":res["stars"], "employees_quantity":res["employees_quantity"]}
+
+@restaurants_bp.route('/stars_average_per_cuisine', methods=["GET"])
+def stars_average_per_cuisine():
+    from app import mongo
+    db = mongo.db.restaurants
+    pipeline = [
+        {"$group": {"_id": "$country", "avg_stars": {"$avg": "$stars"}}},
+        {"$sort": {"total_sales": -1}},
+        {"$limit": 5}
+    ]
+    resultado = list(db.aggregate(pipeline))
+    return jsonify(resultado)
+    
