@@ -68,3 +68,23 @@ def total_sales_per_recipe():
     ]
     resultado = list(db.aggregate(pipeline))
     return jsonify(resultado)
+
+@sales_bp.route('/total_sales_per_restaurant_month', methods=["GET"])
+def total_sales_per_restaurant_month():
+    from app import mongo
+    db = mongo.db.sales
+    pipeline = [
+        {"$lookup": {
+            "from": "restaurants",
+            "localField": "id_restaurant",
+            "foreignField": "_id",
+            "as": "restaurant"
+        }},
+
+        {"$unwind": "$restaurant"},
+        {"$group": {"_id": "$restaurant.name", "month": {"$month": "date"}, "total_sales ($)": {"$sum": "$total ($)"}}},
+        {"$sort": {"total_sales": -1}},
+        {"$limit": 10}
+    ]
+    resultado = list(db.aggregate(pipeline))
+    return jsonify(resultado)
