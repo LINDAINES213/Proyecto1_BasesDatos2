@@ -42,12 +42,14 @@ def editusers(id):
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "name":res["name"], "age":res["age"], "gender":res["gender"], "country":res["country"], "contact":res["contact"]}
 
-@users_bp.route('/usarios_por_pais', methods=["GET"])
+@users_bp.route('/users_per_country', methods=["GET"])
 def usuarios_por_pais():
     from app import mongo
     db = mongo.db.users
     pipeline = [
-        {"$group": {"_id": "$country", "total": {"$sum": 1}}}
+        {"$group": {"_id": "$country", "total": {"$sum": 1}}},
+        {"$sort": {"total": -1}},
+        {"$limit": 10}
     ]
     resultado = list(db.aggregate(pipeline))
     return jsonify(resultado)
