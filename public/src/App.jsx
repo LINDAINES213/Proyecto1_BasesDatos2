@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 // import axios from 'axios'
-import { CRUDoperations } from './pages'
+import { CRUDoperations, Restaurants } from './pages'
 import { Content, Sidebar } from './components'
 
 // eslint-disable-next-line react/function-component-definition
@@ -19,13 +19,13 @@ function App() {
         {selectedMenuItem === 'Inicio' && <p>Contenido relacionado con Inicio.</p>}
         {selectedMenuItem === 'Acerca de' && <p>Contenido relacionado con Acerca de.</p>}
         {selectedMenuItem === 'Servicios' && <p>Contenido relacionado con Servicios.</p>}
-        {selectedMenuItem === 'Contacto' && <p>Contenido relacionado con Contacto.</p>}
-        {selectedMenuItem === 'Información' && <CRUDoperations />}
+        {selectedMenuItem === 'Usuarios' && <CRUDoperations />}
+        {selectedMenuItem === 'Restaurantes' && <Restaurants />}
         {selectedMenuItem !== 'Inicio' &&
          selectedMenuItem !== 'Acerca de' &&
          selectedMenuItem !== 'Servicios' &&
-         selectedMenuItem !== 'Contacto' &&
-         selectedMenuItem !== 'Información' && <p>Contenido no definido.</p>}
+         selectedMenuItem !== 'Restaurantes' &&
+         selectedMenuItem !== 'Usuarios' && <p>Contenido no definido.</p>}
       </Content>
     </div>
   )

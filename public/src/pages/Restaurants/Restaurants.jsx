@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable
- } from './CRUDoperations.module.css'
+ } from './Restaurants.module.css'
 import axios from 'axios'
 
 // eslint-disable-next-line react/function-component-definition
-const CRUDoperations = () => {
+const Restaurants = () => {
   const [users, setUsers] = useState([])
   const [id, setId] = useState(0)
   const [name, setName] = useState('')
@@ -97,7 +97,7 @@ const CRUDoperations = () => {
   <div className={crud}>
     <div className='row mt-5'>
       <div className='col lg-6 mt-5'>
-        <h3>Añadir usuario:</h3>
+        <h3>Añadir restaurante:</h3>
         <form onSubmit={(e) => submit(e, id)}>
             <div className={inputContainer}>
                 <i className="material-icons prefix">person</i>
@@ -161,4 +161,4 @@ const CRUDoperations = () => {
   )
 }
 
-export default CRUDoperations
+export default Restaurants
