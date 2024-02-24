@@ -9,7 +9,7 @@ def getpost():
     db = mongo.db.users
     if request.method == "GET":
         o = []
-        for i in db.find():
+        for i in db.find().sort("name", 1):
             o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender":i["gender"], "country":i["country"], "contact":i["contact"]})
         return jsonify(o)
     elif request.method == "POST":
