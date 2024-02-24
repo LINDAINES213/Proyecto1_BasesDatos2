@@ -59,7 +59,7 @@ def age_average_per_gender():
     from app import mongo
     db = mongo.db.users
     pipeline = [
-        {"$group": {"_id": "$gender", "average_age": {"$avg": "$age"}}}
+        {"$group": {"_id": "$gender", "average_age": {"$avg": "$age"}}},
         {"$sort": {"average_age": -1}}
     ]
     resultado = list(db.aggregate(pipeline))
