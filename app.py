@@ -7,6 +7,7 @@ import json
 from routes.users_collection import users_bp
 from routes.restaurants_collection import restaurants_bp
 from routes.recipes_collection import recipes_bp
+from routes.sales_collection import sales_bp
 
 
 app = Flask(__name__)
@@ -18,8 +19,7 @@ CORS(app)
 app.register_blueprint(users_bp)
 app.register_blueprint(restaurants_bp)
 app.register_blueprint(recipes_bp)
-
-db = mongo.db.demo2
+app.register_blueprint(sales_bp)
 
 @app.route("/", methods=["GET"])
 def root():
