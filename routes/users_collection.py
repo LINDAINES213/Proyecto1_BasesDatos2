@@ -42,7 +42,7 @@ def editusers(id):
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "name":res["name"], "age":res["age"], "gender":res["gender"], "country":res["country"], "contact":res["contact"]}
 
-@users_bp.route('/usarios_por_pais')
+@users_bp.route('/usarios_por_pais', methods=["GET"])
 def usuarios_por_pais():
     from app import mongo
     db = mongo.db.users
