@@ -48,3 +48,23 @@ def editsales(id):
     date_str = str(res["date"])
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "date": date_str, "id_recipe": str(res["id_recipe"]), "id_restaurant": str(res["id_restaurant"]), "id_user": str(res["id_user"]), "quantity":res["quantity"], "price ($)":res["price ($)"], "total ($)":res["total ($)"]}
+
+@sales_bp.route('/total_sales_per_recipe', methods=["GET"])
+def total_sales_per_recipe():
+    from app import mongo
+    db = mongo.db.sales
+    pipeline = [
+        {"$lookup": {
+            "from": "recipes",
+            "localField": "id_recipe",
+            "foreignField": "_id",
+            "as": "recipe"
+        }},
+
+        {"$unwind": "$recipe"},
+        {"$group": {"_id": "$recipe.title", "total_sales": {"$sum": "$total ($)"}}},
+        {"$sort": {"total_sales": -1}},
+        {"$limit": 10}
+    ]
+    resultado = list(db.aggregate(pipeline))
+    return jsonify(resultado)
