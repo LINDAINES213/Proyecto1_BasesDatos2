@@ -43,13 +43,24 @@ def editusers(id):
     return {"_ID": str(ObjectId(res["_id"])), "name":res["name"], "age":res["age"], "gender":res["gender"], "country":res["country"], "contact":res["contact"]}
 
 @users_bp.route('/users_per_country', methods=["GET"])
-def usuarios_por_pais():
+def users_per_country():
     from app import mongo
     db = mongo.db.users
     pipeline = [
         {"$group": {"_id": "$country", "total": {"$sum": 1}}},
         {"$sort": {"total": -1}},
         {"$limit": 10}
+    ]
+    resultado = list(db.aggregate(pipeline))
+    return jsonify(resultado)
+
+@users_bp.route('/age_average_per_gender', methods=["GET"])
+def age_average_per_gender():
+    from app import mongo
+    db = mongo.db.users
+    pipeline = [
+        {"$group": {"_id": "$gender", "average_age": {"$avg": "$age"}}}
+        {"$sort": {"average_age": -1}}
     ]
     resultado = list(db.aggregate(pipeline))
     return jsonify(resultado)
