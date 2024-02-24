@@ -92,7 +92,7 @@ table {
   }
 
 .scrollableTable {
-   max-height: 60vh; 
+   max-height: 59vh; 
    overflow-y: auto;
    border: 1px solid black; /* Añadir un borde negro de 1 píxel */
 }
@@ -107,5 +107,11 @@ table {
 
 .scrollableTable::-webkit-scrollbar-track {
   background-color: #f1f1f1; /* Color de fondo de la pista de la barra de desplazamiento */
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 0.8fr 2fr; /* La primera columna ocupa 1 parte y la segunda columna ocupa 2 partes */
+  gap: 10px; /* Puedes ajustar el espacio entre las columnas según tus necesidades */
 }
   

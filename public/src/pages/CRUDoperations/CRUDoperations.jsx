@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable
+import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable,
+  formGrid
  } from './CRUDoperations.module.css'
 import axios from 'axios'
 
@@ -11,7 +12,9 @@ const CRUDoperations = () => {
   const [age, setAge] = useState('')
   const [gender, setGender] = useState('')
   const [country, setCountry] = useState('')
-  const [contact, setContact] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+//  const [contact, setContact] = useState('')
 
   useEffect(() => {
     axios.get("https://proyecto1bd.onrender.com/users")
@@ -22,7 +25,8 @@ const CRUDoperations = () => {
         setAge('')
         setGender('')
         setCountry('')
-        setContact('')
+        setEmail('')
+        setPhone('')
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -37,14 +41,18 @@ const CRUDoperations = () => {
         age,
         gender,
         country,
-        contact
+        contact: {
+          email,
+          phone
+        }
       }).then(() => {
         fetchData()
         setName('')
         setAge('')
         setGender('')
         setCountry('')
-        setContact('')
+        setEmail('')
+        setPhone('')
       })
     } else {
       axios.put(`https://proyecto1bd.onrender.com/users/${id}`, {
@@ -52,14 +60,18 @@ const CRUDoperations = () => {
         age,
         gender,
         country,
-        contact
+        contact: {
+          email,
+          phone
+        }
       }).then(() => {
         fetchData()
         setName('')
         setAge('')
         setGender('')
         setCountry('')
-        setContact('')
+        setEmail('')
+        setPhone('')
       })
     }
   }
@@ -78,7 +90,8 @@ const CRUDoperations = () => {
         setAge(res.data.age),
         setGender(res.data.gender),
         setCountry(res.data.country),
-        setContact(res.data.contact),
+        setEmail(res.data.contact.email),
+        setPhone(res.data.contact.phone),
         setId(res.data._ID)
       })
   }
@@ -99,25 +112,39 @@ const CRUDoperations = () => {
       <div className='col lg-6 mt-5'>
         <h3>Añadir usuario:</h3>
         <form onSubmit={(e) => submit(e, id)}>
+          <div className={formGrid}>
             <div className={inputContainer}>
                 <i className="material-icons prefix">person</i>
                 <input className={inputText} value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder='Nombre' />
             </div>
             <div className={inputContainer}>
                 <i className="material-icons prefix">mail</i>
-                <input className={inputText} value={age} onChange={(e) => setAge(e.target.value)} type="age" placeholder='age' />
+                <input className={inputText} value={age} onChange={(e) => setAge(e.target.value)} type="number" placeholder='Edad' />
+            </div>
+            <div className={inputContainer}>
+                <i className="material-icons prefix">mail</i>
+                <input className={inputText} value={gender} onChange={(e) => setGender(e.target.value)} 
+                type="text" placeholder='Genero (Male/Female)' />
+            </div>
+            <div className={inputContainer}>
+                <i className="material-icons prefix">mail</i>
+                <input className={inputText} value={country} onChange={(e) => setCountry(e.target.value)} type="text" placeholder='País' />
+            </div>
+            <div className={inputContainer}>
+                <i className="material-icons prefix">mail</i>
+                <input className={inputText} value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Correo' />
             </div>
             <div className={inputContainer}>
                 <i className="material-icons prefix">vpn_key</i>
-                <input className={inputText} value={gender} onChange={(e) => setGender(e.target.value)} type="gender"
-                    placeholder='Contraseña' />
+                <input className={inputText} value={phone} onChange={(e) => setPhone(e.target.value)} type="number"
+                    placeholder='Teléfono' />
                 <div className={buttonContainer}>
                     <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Submit
                         <i className="material-icons right">send</i>
                     </button>
                 </div>
             </div>
-
+          </div>
         </form>
       </div>
       <div className={scrollableTable}>
