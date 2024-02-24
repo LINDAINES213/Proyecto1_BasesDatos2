@@ -62,8 +62,8 @@ def total_sales_per_recipe():
         }},
 
         {"$unwind": "$recipe"},
-        {"$group": {"_id": "$recipe.title", "total_sales": {"$sum": "$total ($)"}}},
-        {"$sort": {"total_sales": -1}},
+        {"$group": {"_id": "$recipe.title", "total_sales ($)": {"$sum": "$total ($)"}}},
+        {"$sort": {"total_sales ($)": -1}},
         {"$limit": 10}
     ]
     resultado = list(db.aggregate(pipeline))
