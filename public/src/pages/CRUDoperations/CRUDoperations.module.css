@@ -21,6 +21,14 @@
 .buttonContainerOptions button {
  margin-right: 2vh;
 }
+
+.centeredDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
 .inputContainer button {
     background-color: rgb(8, 33, 227);
 }
@@ -85,11 +93,13 @@ table {
   th, td {
     border: 1px solid black;
     padding: 8px;
+    color: #000000;
     text-align: center; /* Centra horizontalmente el contenido */
   }
 
   /* Alineación a la izquierda para celdas específicas */
   td.leftAligned {
+    color: #000000;
     text-align: left;
   }
   
