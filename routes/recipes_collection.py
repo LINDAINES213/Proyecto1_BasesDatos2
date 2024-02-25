@@ -23,15 +23,15 @@ def getpost():
                 o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
         return jsonify(o)
     elif request.method == "POST":
-        '''restaurant_ids = ast.literal_eval(request.json["restaurants"])
-        restaurant_ids = [ObjectId(r) for r in restaurant_ids]'''
-        restaurant_ids_str = request.json["restaurants"]
+        restaurant_ids = ast.literal_eval(request.json["restaurants"])
+        restaurant_ids = [ObjectId(r) for r in restaurant_ids]
+        '''restaurant_ids_str = request.json["restaurants"]
 
         matches = re.findall(r"ObjectId\('(.*?)'", restaurant_ids_str)
 
         object_ids = [m.strip('[') for m in matches]
 
-        restaurant_ids = [ObjectId(oid) for oid in object_ids]
+        restaurant_ids = [ObjectId(oid) for oid in object_ids]'''
 
         id = db.insert_one({"title": request.json["title"], "ingredients": request.json["ingredients"], "directions": request.json["directions"], "cook_time (min)": request.json["cook_time (min)"], "country": request.json["country"], "prep_time (min)": request.json["prep_time (min)"], "price ($)": request.json["price ($)"], "restaurants": restaurant_ids})
         inserted_id = id.inserted_id
@@ -46,16 +46,16 @@ def deleteput(id):
         return jsonify({"message": "Deleted"})
     elif request.method == "PUT":
         
-        '''restaurant_ids = ast.literal_eval(request.json["restaurants"])
-        restaurant_ids = [ObjectId(r) for r in restaurant_ids]'''
+        restaurant_ids = ast.literal_eval(request.json["restaurants"])
+        restaurant_ids = [ObjectId(r) for r in restaurant_ids]
 
-        restaurant_ids_str = request.json["restaurants"]
+        '''restaurant_ids_str = request.json["restaurants"]
 
         matches = re.findall(r"ObjectId\('(.*?)'", restaurant_ids_str)
 
         object_ids = [m.strip('[') for m in matches]
 
-        restaurant_ids = [ObjectId(oid) for oid in object_ids]
+        restaurant_ids = [ObjectId(oid) for oid in object_ids]'''
 
         db.update_one({"_id": ObjectId(id)}, {"$set":{
             "title": request.json["title"],
