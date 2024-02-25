@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { buttonContainer, inputContainer, inputText, selectText, crud, leftAligned, editButton, scrollableTable,
-  formGrid, buttonContainerOptions, centeredDiv, inputTextSmall
+  formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit
  } from './CRUDoperations.module.css'
 import { Loading } from '../../components'
 import axios from 'axios'
@@ -225,13 +225,13 @@ const CRUDoperations = () => {
             </form>
           </div>
           <h4>Limitar cantidad de usuarios a mostrar:</h4>
-          <div className={buttonContainerOptions}>
+          <div className={buttonContainerOptionsLimit}>
               <input className={inputTextSmall} value={limit} onChange={(e) => setLimit(e.target.value)} 
                 type="number" placeholder='Cantidad:' />
               <div className={buttonContainer}>
                   <button className=" btn btn-sm btn-primary waves-effect waves-light right" name="action" 
                   onClick={() => fetchData(limit)}>Limitar 
-                    <i className="material-icons prefix">remove_circle_outline</i>
+                    <i className="material-icons prefix" style={{marginLeft: "0.3vw"}}>remove_circle_outline</i>
                   </button>
               </div>
           </div>
@@ -326,7 +326,7 @@ const CRUDoperations = () => {
         </button>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('agruparPorPais')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>people</i> Agrupar personas por país
+            <i className="material-icons right" style={{marginRight: "1vh"}}>location_city</i> 10 países con más usuarios
         </button>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('edadPromedioPorGenero')}>
