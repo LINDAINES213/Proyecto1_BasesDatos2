@@ -110,8 +110,8 @@ def sold_recipes_per_country():
         }, 
             
         {"$unwind": "$recipe"}, 
-        {"$group": { "_id": { "country": "$recipe.country", "recipe": "$recipe.title" }, "total_ventas": {"$sum": "$total ($)"} }}, 
-        {"$sort": {"total_ventas": -1}}, 
+        {"$group": { "_id": { "country": "$recipe.country", "recipe": "$recipe.title" }, "total_ventas ($)": {"$sum": "$total ($)"} }}, 
+        {"$sort": {"total_ventas ($)": -1}}, 
         {"$limit": 10}
     ]
     resultado = list(db.aggregate(pipeline))
