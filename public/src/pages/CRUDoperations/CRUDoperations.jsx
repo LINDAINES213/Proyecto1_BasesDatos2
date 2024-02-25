@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { buttonContainer, inputContainer, inputText, selectText, crud, leftAligned, editButton, scrollableTable,
-  formGrid, buttonContainerOptions, centeredDiv
+  formGrid, buttonContainerOptions, centeredDiv, inputTextSmall
  } from './CRUDoperations.module.css'
 import { Loading } from '../../components'
 import axios from 'axios'
@@ -15,6 +15,7 @@ const CRUDoperations = () => {
   const [country, setCountry] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [limit, setLimit] = useState()
   const [selectedOption, setSelectedOption] = useState('verUsuarios')
   const [loading, setLoading] = useState(false)
 
@@ -23,6 +24,7 @@ const CRUDoperations = () => {
     switch (option) {
       case 'verUsuarios':
         fetchData()
+        setLimit()
         break
       case 'agruparPorPais':
         fetchDataPerCountry()
@@ -118,9 +120,16 @@ const CRUDoperations = () => {
       })
   }
 
-  const fetchData = () => {
+  const fetchData = (limit) => {
     setLoading(true)
-    axios.get("https://proyecto1bd.onrender.com/users")
+  
+    const parsedLimit = parseInt(limit)
+    const isLimitInteger = !isNaN(parsedLimit) && Number.isInteger(parsedLimit)  
+    const url = isLimitInteger
+      ? `https://proyecto1bd.onrender.com/users?limit=${limit}`
+      : 'https://proyecto1bd.onrender.com/users'
+  
+    axios.get(url)
       .then((res) => {
         setUsers(res.data)
       })
@@ -131,7 +140,8 @@ const CRUDoperations = () => {
         setLoading(false)
       })  
   }
-
+  
+  
   const fetchDataPerCountry = () => {
     setLoading(true)
     axios.get("https://proyecto1bd.onrender.com/users_per_country")
@@ -171,7 +181,6 @@ const CRUDoperations = () => {
     }
     switch (selectedOption) {
       case 'verUsuarios':
-        // Configuración para ver usuarios
         return (
           <div>
             <div className='col lg-6 mt-5'>
@@ -214,6 +223,17 @@ const CRUDoperations = () => {
                 </div>
               </div>
             </form>
+          </div>
+          <h4>Limitar cantidad de usuarios a mostrar:</h4>
+          <div className={buttonContainerOptions}>
+              <input className={inputTextSmall} value={limit} onChange={(e) => setLimit(e.target.value)} 
+                type="number" placeholder='Cantidad:' />
+              <div className={buttonContainer}>
+                  <button className=" btn btn-sm btn-primary waves-effect waves-light right" name="action" 
+                  onClick={() => fetchData(limit)}>Limitar 
+                    <i className="material-icons prefix">remove_circle_outline</i>
+                  </button>
+              </div>
           </div>
           <div className={scrollableTable}>
             <table className='table'>
@@ -295,7 +315,6 @@ const CRUDoperations = () => {
         return null
     }
   }
-
 
   return (
   <div className={crud}>

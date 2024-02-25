@@ -33,7 +33,6 @@
     background-color: rgb(8, 33, 227);
 }
 
-
 .inputText {
     border: 3px solid #ff0000;
     border-radius: 5px; /* Ajusta el valor según sea necesario para obtener el radio deseado */
@@ -43,6 +42,16 @@
     background-color: rgb(255, 255, 255);
     box-sizing:content-box;
     margin-left: 0.5vw;
+}
+
+.inputTextSmall {
+    border: 3px solid #ff0000;
+    border-radius: 5px; /* Ajusta el valor según sea necesario para obtener el radio deseado */
+    width: 15vw;
+    padding: 5px;
+    color: #000000;
+    background-color: rgb(255, 255, 255);
+    box-sizing:content-box;
 }
 
 .selectText {
@@ -68,7 +77,13 @@ h3 {
     margin-bottom: 2vh;
     display: inline-block; 
     border-bottom: 3px solid #ff0000; /* Añade la línea de subrayado más gruesa en el enfoque */
+}
 
+h4 {
+  margin-top: 0;
+  margin-bottom: 2vh;
+  display: inline-block; 
+  border-bottom: 3px solid #ff0000; /* Añade la línea de subrayado más gruesa en el enfoque */
 }
 
 select {
@@ -89,7 +104,6 @@ table {
     border-collapse: collapse;
   }
   
-
   th, td {
     border: 1px solid black;
     padding: 8px;
@@ -130,7 +144,7 @@ table {
   }
 
 .scrollableTable {
-   max-height: 59vh; 
+   max-height: 49vh; 
    overflow-y: auto;
    border: 1px solid black; /* Añadir un borde negro de 1 píxel */
 }
