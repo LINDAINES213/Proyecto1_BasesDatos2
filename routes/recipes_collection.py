@@ -11,10 +11,16 @@ def getpost():
     from app import mongo
     db = mongo.db.recipes
     if request.method == "GET":
+        limit = int(request.args.get('limit', 0))
         o = []
-        for i in db.find():
-            restaurant_ids = str(i["restaurants"])
-            o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
+        if limit > 0:
+            for i in db.find().sort("title", 1).limit(limit):
+                restaurant_ids = str(i["restaurants"])
+                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
+        else:
+            for i in db.find().sort("title", 1):
+                restaurant_ids = str(i["restaurants"])
+                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
         return jsonify(o)
     elif request.method == "POST":
         '''restaurant_ids = ast.literal_eval(request.json["restaurants"])
@@ -70,3 +76,12 @@ def editrecipes(id):
     restaurant_ids = str(res["restaurants"])
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "title":res["title"], "ingredients":res["ingredients"], "directions":res["directions"], "cook_time (min)":res["cook_time (min)"], "country":res["country"], "prep_time (min)":res["prep_time (min)"], "price ($)":res["price ($)"], "restaurants": restaurant_ids}
+
+@recipes_bp.route('/check_recipeId', methods=["GET"])
+def check_recipeId():
+    from app import mongo
+    db = mongo.db.recipes
+    if request.method == "GET":
+        query = db.find({}, { "_id": 1, "title": 1}).sort("title", 1)
+        result = [{**doc, '_id': str(doc['_id'])} for doc in query]
+    return jsonify(result)

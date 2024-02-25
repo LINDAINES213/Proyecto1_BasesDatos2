@@ -8,9 +8,14 @@ def getpost():
     from app import mongo
     db = mongo.db.users
     if request.method == "GET":
+        limit = int(request.args.get('limit', 0))
         o = []
-        for i in db.find().sort("name", 1):
-            o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender":i["gender"], "country":i["country"], "contact":i["contact"]})
+        if limit > 0:
+            for i in db.find().sort("name", 1).limit(limit):
+                o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender":i["gender"], "country":i["country"], "contact":i["contact"]})
+        else:
+            for i in db.find().sort("name", 1):
+                o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender": i["gender"], "country": i["country"], "contact": i["contact"]})
         return jsonify(o)
     elif request.method == "POST":
         id = db.insert_one({"name": request.json["name"], "age": request.json["age"], "gender": request.json["gender"], "country": request.json["country"], "contact": {"email": request.json["contact"]["email"], "phone": request.json["contact"]["phone"]}})
