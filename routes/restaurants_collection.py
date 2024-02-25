@@ -8,9 +8,14 @@ def getpost():
     from app import mongo
     db = mongo.db.restaurants
     if request.method == "GET":
+        limit = int(request.args.get('limit', 0))
         o = []
-        for i in db.find():
-            o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "country":i["country"], "stars":i["stars"], "employees_quantity":i["employees_quantity"]})
+        if limit > 0:
+            for i in db.find().sort("stars", -1).limit(limit):
+                o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "country":i["country"], "stars":i["stars"], "employees_quantity":i["employees_quantity"]})
+        else:
+            for i in db.find().sort("stars", -1):
+                o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "country":i["country"], "stars":i["stars"], "employees_quantity":i["employees_quantity"]})
         return jsonify(o)
     elif request.method == "POST":
         id = db.insert_one({"name": request.json["name"], "country": request.json["country"], "stars": request.json["stars"], "employees_quantity": {"Female": request.json["employees_quantity"]["Female"], "Male": request.json["employees_quantity"]["Male"]}})
@@ -52,4 +57,3 @@ def stars_average_per_cuisine():
     ]
     resultado = list(db.aggregate(pipeline))
     return jsonify(resultado)
-    
