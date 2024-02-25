@@ -12,6 +12,15 @@
     margin-bottom: 2vh;
 }
 
+.buttonContainerOptions {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2vh;
+}
+
+.buttonContainerOptions button {
+ margin-right: 2vh;
+}
 .inputContainer button {
     background-color: rgb(8, 33, 227);
 }
@@ -22,10 +31,23 @@
     border-radius: 5px; /* Ajusta el valor según sea necesario para obtener el radio deseado */
     width: 20vw;
     padding: 5px;
-    color: #ff0000;
+    color: #000000;
     background-color: rgb(255, 255, 255);
     box-sizing:content-box;
     margin-left: 0.5vw;
+}
+
+.selectText {
+  border: 3px solid #ff0000;
+  border-radius: 5px; /* Ajusta el valor según sea necesario para obtener el radio deseado */
+  width: 20vw;
+  padding: 5px;
+  color: #000000;
+  background-color: rgb(255, 255, 255);
+  box-sizing:content-box;
+  margin-left: 0.5vw;
+  padding-left: 0;
+  padding-right: 10px;
 }
 
 input:focus {
@@ -39,6 +61,12 @@ h3 {
     display: inline-block; 
     border-bottom: 3px solid #ff0000; /* Añade la línea de subrayado más gruesa en el enfoque */
 
+}
+
+select {
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 
 button {
@@ -111,7 +139,7 @@ table {
 
 .formGrid {
   display: grid;
-  grid-template-columns: 0.8fr 2fr; /* La primera columna ocupa 1 parte y la segunda columna ocupa 2 partes */
+  grid-template-columns: 0.8fr 1fr 2fr; /* La primera columna ocupa 1 parte y la segunda columna ocupa 2 partes */
   gap: 10px; /* Puedes ajustar el espacio entre las columnas según tus necesidades */
 }
   

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable,
-  formGrid
+import { buttonContainer, inputContainer, inputText, selectText, crud, leftAligned, editButton, scrollableTable,
+  formGrid, buttonContainerOptions
  } from './CRUDoperations.module.css'
 import axios from 'axios'
 
@@ -9,12 +9,11 @@ const CRUDoperations = () => {
   const [users, setUsers] = useState([])
   const [id, setId] = useState(0)
   const [name, setName] = useState('')
-  const [age, setAge] = useState('')
+  const [age, setAge] = useState()
   const [gender, setGender] = useState('')
   const [country, setCountry] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-//  const [contact, setContact] = useState('')
 
   useEffect(() => {
     axios.get("https://proyecto1bd.onrender.com/users")
@@ -106,6 +105,17 @@ const CRUDoperations = () => {
       })
   }
 
+  const fetchDataPerCountry = () => {
+    axios.get("https://proyecto1bd.onrender.com/users_per_country")
+      .then((res) => {
+        setUsers(res.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+  }
+
+
   return (
   <div className={crud}>
     <div className='row mt-5'>
@@ -118,16 +128,19 @@ const CRUDoperations = () => {
                 <input className={inputText} value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder='Nombre' />
             </div>
             <div className={inputContainer}>
-                <i className="material-icons prefix">mail</i>
-                <input className={inputText} value={age} onChange={(e) => setAge(e.target.value)} type="number" placeholder='Edad' />
+                <i className="material-icons prefix">cake</i>
+                <input className={inputText} value={age} onChange={(e) => setAge(parseInt(e.target.value,10))} type="number" placeholder='Edad' />
             </div>
             <div className={inputContainer}>
-                <i className="material-icons prefix">mail</i>
-                <input className={inputText} value={gender} onChange={(e) => setGender(e.target.value)} 
-                type="text" placeholder='Genero (Male/Female)' />
+                <i className="material-icons prefix">wc</i>
+                <select className={selectText} value={gender} onChange={(e) => setGender(e.target.value)}>
+                    <option value="" disabled>Seleccionar género</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
             </div>
             <div className={inputContainer}>
-                <i className="material-icons prefix">mail</i>
+                <i className="material-icons prefix">location_on</i>
                 <input className={inputText} value={country} onChange={(e) => setCountry(e.target.value)} type="text" placeholder='País' />
             </div>
             <div className={inputContainer}>
@@ -135,11 +148,11 @@ const CRUDoperations = () => {
                 <input className={inputText} value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Correo' />
             </div>
             <div className={inputContainer}>
-                <i className="material-icons prefix">vpn_key</i>
-                <input className={inputText} value={phone} onChange={(e) => setPhone(e.target.value)} type="number"
+                <i className="material-icons prefix">contact_phone</i>
+                <input className={inputText} value={phone} onChange={(e) => setPhone(e.target.value)} type="tel"
                     placeholder='Teléfono' />
                 <div className={buttonContainer}>
-                    <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Submit
+                    <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Enviar 
                         <i className="material-icons right">send</i>
                     </button>
                 </div>
@@ -147,15 +160,26 @@ const CRUDoperations = () => {
           </div>
         </form>
       </div>
+      <div className={buttonContainerOptions}>
+        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">
+            <i className="material-icons right" style={{marginRight: "1vh"}}>person</i> Ver usuarios
+        </button>
+        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">
+            <i className="material-icons right" style={{marginRight: "1vh"}}>people</i> Agrupar personas por país
+        </button>
+        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">
+            <i className="material-icons right" style={{marginRight: "1vh"}}>cake</i> Edad promedio por género
+        </button>
+      </div>
       <div className={scrollableTable}>
-        <table className='table'>
+      <table className='table'>
           <thead>
             <th>Nombre</th>
             <th>Edad</th>
-            <th>Genero</th>
-            <th>Pais</th>
+            <th>Género</th>
+            <th>País</th>
             <th>Email</th>
-            <th>Telefono</th>
+            <th>Teléfono</th>
             <th>Editar</th>
             <th>Eliminar</th>
           </thead>
@@ -166,8 +190,8 @@ const CRUDoperations = () => {
                     <td>{user.age}</td>
                     <td>{user.gender}</td>
                     <td>{user.country}</td>
-                    <td>{user.contact.email}</td> {/* Mostrar el email */}
-                    <td>{user.contact.phone}</td> {/* Mostrar el teléfono */}
+                    <td>{user.contact.email}</td>
+                    <td>{user.contact.phone}</td>
                     <td>
                       <button onClick={() => editusers(user._ID)} className={editButton} type="submit" name="action">
                         <i className="material-icons ">edit</i>
