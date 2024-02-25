@@ -76,3 +76,12 @@ def editrecipes(id):
     restaurant_ids = str(res["restaurants"])
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "title":res["title"], "ingredients":res["ingredients"], "directions":res["directions"], "cook_time (min)":res["cook_time (min)"], "country":res["country"], "prep_time (min)":res["prep_time (min)"], "price ($)":res["price ($)"], "restaurants": restaurant_ids}
+
+@recipes_bp.route('/check_recipeId', methods=["GET"])
+def check_recipeId():
+    from app import mongo
+    db = mongo.db.recipes
+    if request.method == "GET":
+        query = db.find({}, { "_id": 1, "title": 1}).sort("title", 1)
+        result = [{**doc, '_id': str(doc['_id'])} for doc in query]
+    return jsonify(result)
