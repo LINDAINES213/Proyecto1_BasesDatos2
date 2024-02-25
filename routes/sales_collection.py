@@ -80,10 +80,38 @@ def total_sales_per_restaurant_month():
             "foreignField": "_id",
             "as": "restaurant"
         }},
-
         {"$unwind": "$restaurant"},
-        {"$group": {"_id": "$restaurant.name", "month": {"$month": {"$toDate": "$date"}}, "total_sales ($)": {"$sum": "$total ($)"}}},
-        {"$sort": {"total_sales": -1}},
+        {"$project": {
+            "restaurant": "$restaurant.name",
+            "month": {"$month": {"$toDate": "$date"}},
+            "total_sales ($)": "$total ($)"
+        }},
+        {"$group": {
+            "_id": {"restaurant": "$restaurant", "month": "$month"},
+            "total_sales ($)": {"$sum": "$total_sales ($)"},
+        }},
+        {"$sort": {"total_sales ($)": -1}},
+        {"$limit": 10}
+    ]
+    resultado = list(db.aggregate(pipeline))
+    return jsonify(resultado)
+
+@sales_bp.route('/sold_recipes_per_country', methods=["GET"])
+def sold_recipes_per_country():
+    from app import mongo
+    db = mongo.db.sales
+    pipeline = [
+        {"$lookup": { 
+            "from": "recipes", 
+            "localField": "id_recipe", 
+            "foreignField": "_id", 
+            "as": "recipe" 
+            }
+        }, 
+            
+        {"$unwind": "$recipe"}, 
+        {"$group": { "_id": { "country": "$recipe.country", "recipe": "$recipe.title" }, "total_ventas": {"$sum": "$total ($)"} }}, 
+        {"$sort": {"total_ventas": -1}}, 
         {"$limit": 10}
     ]
     resultado = list(db.aggregate(pipeline))
