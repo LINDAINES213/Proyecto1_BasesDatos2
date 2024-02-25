@@ -11,10 +11,16 @@ def getpost():
     from app import mongo
     db = mongo.db.recipes
     if request.method == "GET":
+        limit = int(request.args.get('limit', 0))
         o = []
-        for i in db.find():
-            restaurant_ids = str(i["restaurants"])
-            o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
+        if limit > 0:
+            for i in db.find().sort("title", 1).limit(limit):
+                restaurant_ids = str(i["restaurants"])
+                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
+        else:
+            for i in db.find().sort("title", 1):
+                restaurant_ids = str(i["restaurants"])
+                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
         return jsonify(o)
     elif request.method == "POST":
         '''restaurant_ids = ast.literal_eval(request.json["restaurants"])
