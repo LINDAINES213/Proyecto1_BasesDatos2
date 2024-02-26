@@ -38,7 +38,7 @@ const Restaurants = () => {
 
   useEffect(() => {
     setLoading(true)
-    axios.get("https://proyecto1bd.onrender.com/restaurants")
+    axios.get("http://127.0.0.1:5000/restaurants")
       .then((res) => {
         console.log(res.data)
         setRestaurants(res.data)
@@ -60,7 +60,7 @@ const Restaurants = () => {
     console.log("estrellas",stars)
     event.preventDefault()
     if (id === 0) {
-      axios.post("https://proyecto1bd.onrender.com/restaurants", {
+      axios.post("http://127.0.0.1:5000/restaurants", {
         name,
         country,
         stars,
@@ -77,7 +77,7 @@ const Restaurants = () => {
         setMale('')
       })
     } else {
-      axios.put(`https://proyecto1bd.onrender.com/restaurants/${id}`, {
+      axios.put(`http://127.0.0.1:5000/restaurants/${id}`, {
         name,
         country,
         stars,
@@ -97,14 +97,14 @@ const Restaurants = () => {
   }
   
   const deleteData = (id) => {
-    axios.delete(`https://proyecto1bd.onrender.com/restaurants/${id}`)
+    axios.delete(`http://127.0.0.1:5000/restaurants/${id}`)
       .then(() => {
         fetchData()
       })
   }
 
   const editusers = (id) => {
-    axios.get(`https://proyecto1bd.onrender.com/editrestaurant/${id}`)
+    axios.get(`http://127.0.0.1:5000/editrestaurant/${id}`)
       .then((res) => {
         setName(res.data.name),
         setCountry(res.data.country),
@@ -121,8 +121,8 @@ const Restaurants = () => {
     const parsedLimit = parseInt(limit)
     const isLimitInteger = !isNaN(parsedLimit) && Number.isInteger(parsedLimit)  
     const url = isLimitInteger
-      ? `https://proyecto1bd.onrender.com/restaurants?limit=${limit}`
-      : 'https://proyecto1bd.onrender.com/restaurants'
+      ? `http://127.0.0.1:5000/restaurants?limit=${limit}`
+      : 'http://127.0.0.1:5000/restaurants'
   
     axios.get(url)
       .then((res) => {
@@ -139,7 +139,7 @@ const Restaurants = () => {
   
   const fetchDataStarsAvgPerCuisine = () => {
     setLoading(true)
-    axios.get("https://proyecto1bd.onrender.com/stars_average_per_cuisine")
+    axios.get("http://127.0.0.1:5000/stars_average_per_cuisine")
       .then((res) => {
         setRestaurants(res.data)
       })
@@ -153,7 +153,7 @@ const Restaurants = () => {
 
   const fetchDataAvgAgePerGender = () => {
     setLoading(true)
-    axios.get("https://proyecto1bd.onrender.com/age_average_per_gender")
+    axios.get("http://127.0.0.1:5000/age_average_per_gender")
       .then((res) => {
         console.log("res",res)
         setRestaurants(res.data)
@@ -293,25 +293,6 @@ const Restaurants = () => {
             </table>
           </div>
         )
-      case 'edadPromedioPorGenero':
-        return (
-          <div className={scrollableTable}>
-          <table className='table'>
-            <thead>
-              <th>Género</th>
-              <th>Edad promedio</th>
-            </thead>
-            <tbody>
-              {restaurants.map(rest =>
-                    <tr key={rest.ID}>
-                      <td className={leftAligned}>{rest._ID}</td>
-                      <td>{rest.average_age}</td>
-                    </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        )
       default:
         return null
     }
@@ -327,11 +308,7 @@ const Restaurants = () => {
         </button>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('agruparPorEstrellasPromedio')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>grade</i> Los 5 países con más estrellas en promedio
-        </button>
-        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
-          onClick={() => handleButtonClick('edadPromedioPorGenero')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>cake</i> Edad promedio por género
+            <i className="material-icons right" style={{marginRight: "1vh"}}>grade</i> Promedio de estrellas por país
         </button>
       </div>
       {renderTable()}

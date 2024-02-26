@@ -52,8 +52,7 @@ def stars_average_per_cuisine():
     db = mongo.db.restaurants
     pipeline = [
         {"$group": {"_id": "$country", "avg_stars": {"$avg": "$stars"}}},
-        {"$sort": {"avg_stars": -1}},
-        {"$limit": 5}
+        {"$sort": {"avg_stars": -1, "_id": -1}},
     ]
     resultado = list(db.aggregate(pipeline))
     return jsonify(resultado)
