@@ -11,8 +11,8 @@ const Restaurants = () => {
   const [name, setName] = useState('')
   const [country, setCountry] = useState('')
   const [stars, setStars] = useState(1)
-  const [female, setFemale] = useState('')
-  const [male, setMale] = useState('')
+  const [Female, setFemale] = useState('')
+  const [Male, setMale] = useState('')
   const [limit, setLimit] = useState()
   const [selectedOption, setSelectedOption] = useState('verUsuarios')
   const [loading, setLoading] = useState(false)
@@ -24,8 +24,9 @@ const Restaurants = () => {
         fetchData()
         setLimit()
         break
-      case 'agruparPorPais':
-        fetchDataPerCountry()
+      case 'agruparPorEstrellasPromedio':
+        fetchDataStarsAvgPerCuisine()
+        console.log(restaurants)
         break
       case 'edadPromedioPorGenero':
         fetchDataAvgAgePerGender()
@@ -56,6 +57,7 @@ const Restaurants = () => {
   }, [])
 
   const submit = (event, id) => {
+    console.log("estrellas",stars)
     event.preventDefault()
     if (id === 0) {
       axios.post("https://proyecto1bd.onrender.com/restaurants", {
@@ -63,8 +65,8 @@ const Restaurants = () => {
         country,
         stars,
         employees_quantity: {
-          female,
-          male
+          Female,
+          Male
         }
       }).then(() => {
         fetchData()
@@ -80,8 +82,8 @@ const Restaurants = () => {
         country,
         stars,
         employees_quantity: {
-          female,
-          male
+          Female,
+          Male
         }
       }).then(() => {
         fetchData()
@@ -125,7 +127,6 @@ const Restaurants = () => {
     axios.get(url)
       .then((res) => {
         setRestaurants(res.data)
-        setRestaurants(1)
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -136,9 +137,9 @@ const Restaurants = () => {
   }
   
   
-  const fetchDataPerCountry = () => {
+  const fetchDataStarsAvgPerCuisine = () => {
     setLoading(true)
-    axios.get("https://proyecto1bd.onrender.com/users_per_country")
+    axios.get("https://proyecto1bd.onrender.com/stars_average_per_cuisine")
       .then((res) => {
         setRestaurants(res.data)
       })
@@ -210,12 +211,12 @@ const Restaurants = () => {
               <div className={formGrid}>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">wc</i>
-                    <input className={inputText} value={female} onChange={(e) => setFemale(parseInt(e.target.value,10))} 
+                    <input className={inputText} value={Female} onChange={(e) => setFemale(parseInt(e.target.value,10))} 
                       type="number" placeholder='Cantidad mujeres' />
                 </div>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">wc</i>
-                    <input className={inputText} value={male} onChange={(e) => setMale(e.target.value)} type="number"
+                    <input className={inputText} value={Male} onChange={(e) => setMale(e.target.value)} type="number"
                         placeholder='Cantidad hombres' />
                     <div className={buttonContainer}>
                         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Enviar 
@@ -273,19 +274,19 @@ const Restaurants = () => {
           </div>
         </div>
         )
-      case 'agruparPorPais':
+      case 'agruparPorEstrellasPromedio':
         return (
           <div className={scrollableTable}>
             <table className='table'>
               <thead>
                 <th>País</th>
-                <th>Cantidad de personas</th>
+                <th>Estrellas promedio</th>
               </thead>
               <tbody>
                 {restaurants.map(rest =>
                       <tr key={rest._id}>
                         <td className={leftAligned}>{rest._id}</td>
-                        <td>{rest.total}</td>
+                        <td>{rest.avg_stars}</td>
                       </tr>
                 )}
               </tbody>
@@ -302,8 +303,8 @@ const Restaurants = () => {
             </thead>
             <tbody>
               {restaurants.map(rest =>
-                    <tr key={rest._id}>
-                      <td className={leftAligned}>{rest._id}</td>
+                    <tr key={rest.ID}>
+                      <td className={leftAligned}>{rest._ID}</td>
                       <td>{rest.average_age}</td>
                     </tr>
               )}
@@ -325,8 +326,8 @@ const Restaurants = () => {
             <i className="material-icons right" style={{marginRight: "1vh"}}>local_dining</i> Ver restaurantes
         </button>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
-          onClick={() => handleButtonClick('agruparPorPais')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>location_city</i> 10 países con más usuarios
+          onClick={() => handleButtonClick('agruparPorEstrellasPromedio')}>
+            <i className="material-icons right" style={{marginRight: "1vh"}}>grade</i> Los 5 países con más estrellas en promedio
         </button>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('edadPromedioPorGenero')}>
