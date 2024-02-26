@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { buttonContainer, inputContainer, inputText, selectText, crud, leftAligned, editButton, scrollableTable,
+import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable,
   formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit, inputTextSlider
  } from './Restaurants.module.css'
 import { Loading } from '../../components'
