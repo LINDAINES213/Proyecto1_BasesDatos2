@@ -5,7 +5,6 @@ import { buttonContainer, inputContainer, inputText, selectText, crud, leftAlign
 import { Loading } from '../../components'
 import axios from 'axios'
 
-// eslint-disable-next-line react/function-component-definition
 const CRUDoperations = () => {
   const [users, setUsers] = useState([])
   const [id, setId] = useState(0)

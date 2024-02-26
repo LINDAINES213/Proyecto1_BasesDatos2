@@ -3,8 +3,10 @@
 }
 
 .buttonContainer {
-  margin-left: 0.5vw;
+  margin-left: 1vw;
 }
+
+
 
 .inputContainer {
   display: flex;
@@ -12,7 +14,15 @@
   margin-bottom: 2vh;
 }
 
+
+
 .buttonContainerOptions {
+display: flex;
+align-items: center;
+margin-bottom: 2vh;
+}
+
+.buttonContainerOptionsLimit {
 display: flex;
 align-items: center;
 margin-bottom: 2vh;
@@ -20,6 +30,7 @@ margin-bottom: 2vh;
 
 .buttonContainerOptions button {
 margin-right: 2vh;
+padding-right: 2vh;
 }
 
 .centeredDiv {
@@ -42,6 +53,34 @@ height: 80vh;
   background-color: rgb(255, 255, 255);
   box-sizing:content-box;
   margin-left: 0.5vw;
+}
+
+.inputTextSlider {
+  border: 3px solid #ff0000;
+  border-radius: 5px; /* Ajusta el valor según sea necesario para obtener el radio deseado */
+  padding: 5px;
+  color: #000000;
+  background-color: rgb(255, 255, 255);
+  box-sizing:content-box;
+  margin-left: 0.5vw;
+}
+
+label {
+  color: #000000;
+  margin-left: 0.5vw;
+  font-weight: bold;
+  margin-bottom: 0.3vh;
+  font-size: larger;
+}
+
+.inputTextSmall {
+  border: 3px solid #ff0000;
+  border-radius: 5px; /* Ajusta el valor según sea necesario para obtener el radio deseado */
+  width: 15vw;
+  padding: 5px;
+  color: #000000;
+  background-color: rgb(255, 255, 255);
+  box-sizing:content-box;
 }
 
 .selectText {
@@ -67,7 +106,13 @@ h3 {
   margin-bottom: 2vh;
   display: inline-block; 
   border-bottom: 3px solid #ff0000; /* Añade la línea de subrayado más gruesa en el enfoque */
+}
 
+h4 {
+margin-top: 0;
+margin-bottom: 2vh;
+display: inline-block; 
+border-bottom: 3px solid #ff0000; /* Añade la línea de subrayado más gruesa en el enfoque */
 }
 
 select {
@@ -128,7 +173,7 @@ table button i {
 }
 
 .scrollableTable {
- max-height: 59vh; 
+ max-height: 49vh; 
  overflow-y: auto;
  border: 1px solid black; /* Añadir un borde negro de 1 píxel */
 }
