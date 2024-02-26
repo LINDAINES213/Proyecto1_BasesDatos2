@@ -1,31 +1,24 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { buttonMenu, dropdownContent, inputContainer, checkContainer } from './ElementsMenu.module.css'
+import { buttonMenu, dropdownContent, inputContainer, checkContainer } from './ElementsMenuId.module.css'
 
-const ElementsMenu = ({
-  menu,
-  selectedElements,
-  setSelectedElements,
-  newElement,
-  setNewElement,
-  availableElements,
-  setAvailableElements,
-  allowAdd,
-}) => {
+const ElementsMenuId = ({ menu, selectedElements, setSelectedElements, newElement, setNewElement, availableElements,
+  setAvailableElements, allowAdd }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false)
 
   const handleElementChange = (element) => {
-    const isSelected = selectedElements.includes(element)
+    const isSelected = selectedElements.some((item) => item._id === element._id)
 
     if (isSelected) {
-      setSelectedElements(selectedElements.filter((item) => item !== element))
+      setSelectedElements(selectedElements.filter((item) => item._id !== element._id))
     } else {
       setSelectedElements([...selectedElements, element])
     }
   }
 
   const handleAddElement = () => {
-    if (newElement && !availableElements.includes(newElement) && !selectedElements.includes(newElement)) {
+    if (newElement.name && !availableElements.some((item) => item._id === newElement._id) 
+    && !selectedElements.some((item) => item._id === newElement._id)) {
       setAvailableElements([...availableElements, newElement])
       setSelectedElements([...selectedElements, newElement])
       setNewElement('')
@@ -41,14 +34,14 @@ const ElementsMenu = ({
         {isMenuVisible && (
           <div className={dropdownContent}>
             {availableElements.map((element) => (
-              <div key={element} className={checkContainer}>
-                <label htmlFor={element}>{element}</label>
+              <div key={element._id} className={checkContainer}>
+                <label htmlFor={element._id}>{element.name}</label>
                 <input
                   type="checkbox"
-                  id={element}
-                  checked={selectedElements.includes(element)}
+                  id={element._id}
+                  checked={selectedElements.some((item) => item._id === element._id)}
                   onChange={() => handleElementChange(element)}
-                  disabled={!allowAdd}
+                  disabled={allowAdd}
                 />
               </div>
             ))}
@@ -56,8 +49,8 @@ const ElementsMenu = ({
               <div className={inputContainer}>
                 <input
                   type="text"
-                  value={newElement}
-                  onChange={(e) => setNewElement(e.target.value)}
+                  value={newElement.name}
+                  onChange={(e) => setNewElement({ _id: Math.random().toString(), name: e.target.value })}
                   placeholder="Nuevo elemento"
                 />
                 <button onClick={handleAddElement}>Agregar</button>
@@ -70,15 +63,15 @@ const ElementsMenu = ({
   )
 }
 
-ElementsMenu.propTypes = {
-  menu: PropTypes.node.isRequired,
+ElementsMenuId.propTypes = {
+  menu: PropTypes.string.isRequired,
   selectedElements: PropTypes.array.isRequired,
   setSelectedElements: PropTypes.func.isRequired,
-  newElement: PropTypes.string.isRequired,
+  newElement: PropTypes.object.isRequired,
   setNewElement: PropTypes.func.isRequired,
   availableElements: PropTypes.array.isRequired,
   setAvailableElements: PropTypes.func.isRequired,
   allowAdd: PropTypes.bool.isRequired,
 }
 
-export default ElementsMenu
+export default ElementsMenuId

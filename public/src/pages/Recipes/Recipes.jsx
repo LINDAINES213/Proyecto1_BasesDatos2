@@ -1,24 +1,40 @@
-import { useEffect, useState } from 'react'
-import { buttonContainer, inputContainer, inputText, selectText, crud, leftAligned, editButton, scrollableTable,
-  formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit
+import { useEffect, useState, useRef } from 'react'
+import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable,
+  formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit, inputContainerMenu
  } from './Recipes.module.css'
-import { Loading, ElementsMenu } from '../../components'
+import { Loading, ElementsMenu, ElementsMenuId } from '../../components'
 import axios from 'axios'
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([])
   const [id, setId] = useState(0)
   const [title, setTitle] = useState('')
-  const [ingredients, setIngredients] = useState()
+  const [ingredients, setIngredients] = useState([])
   const [directions, setDirections] = useState('')
   const [cook_time, setCook_time] = useState('')
   const [country, setCountry] = useState('')
   const [prep_time, setPrep_time] = useState('')
   const [price, setPrice] = useState('')
-  const [restaurants, setRestaurants] = useState('')
+  const [restaurants, setRestaurants] = useState([])
   const [limit, setLimit] = useState()
   const [selectedOption, setSelectedOption] = useState('verUsuarios')
   const [loading, setLoading] = useState(false)
+  const [menuRestaurants, setMenuRestaurants] = useState([{name:"Restaurante1", _id: "121322" }, {name:"Restaurante2", _id: "5555"}])
+  const [newIngredient, setNewIngredient] = useState('')
+  const [availableIngredients, setAvailableIngredients] = useState([])
+  const [newDirections, setNewDirections] = useState('')
+  const [availableDirections, setAvailableDirections] = useState([])
+  const [newRestaurants, setNewRestaurants] = useState('')
+  const [availableRestaurants, setAvailableRestaurants] = useState([{name:"Restaurante1", _id: "121322" }, {name:"Restaurante2", _id: "5555"}])
+
+
+  const allIdsInMenuRef = useRef([])
+
+  useEffect(() => {
+    // Calcula los _id y almacénalos en la referencia
+    allIdsInMenuRef.current = menuRestaurants.map(item => item._id)
+  }, [menuRestaurants])
+
 
   const handleButtonClick = (option) => {
     setSelectedOption(option)
@@ -40,6 +56,7 @@ const Recipes = () => {
 
   useEffect(() => {
     setLoading(true)
+  
     axios.get("http://127.0.0.1:5000/recipes")
       .then((res) => {
         setRecipes(res.data)
@@ -51,15 +68,26 @@ const Recipes = () => {
         setCountry('')
         setPrep_time('')
         setPrice('')
-        setRestaurants('')        
+        setRestaurants('')
       })
       .catch((error) => {
-        console.error('Error fetching data:', error)
-      }).finally(() => {
+        console.error('Error fetching recipes data:', error)
+      })
+      .finally(() => {
         setLoading(false)
+  
+        // Luego de que la primera solicitud haya terminado (ya sea exitosa o con error),
+        // realiza la segunda solicitud
+        axios.get("http://127.0.0.1:5000/check_restaurantsId")
+          .then((res) => {
+            setAvailableRestaurants(res.data)
+          })
+          .catch((error) => {
+            console.error('Error fetching restaurants data:', error)
+          })
       })
   }, [])
-
+  
   const submit = (event, id) => {
     event.preventDefault()
     if (id === 0) {
@@ -71,7 +99,7 @@ const Recipes = () => {
         country,
         prep_time,
         price,
-        restaurants
+        allIdsInMenu,
       }).then(() => {
         fetchData()
         setTitle('')
@@ -81,7 +109,8 @@ const Recipes = () => {
         setCountry('')
         setPrep_time('')
         setPrice('')
-        setRestaurants('')     
+        setRestaurants('')
+        setMenuRestaurants('')     
       })
     } else {
       axios.put(`http://127.0.0.1:5000/recipes/${id}`, {
@@ -164,7 +193,20 @@ const Recipes = () => {
         setLoading(false)
       })
   }
-
+/*
+  const fetchDataIdRestaurants = () => {
+    setLoading(true)
+    axios.get("http://127.0.0.1:5000/check_restaurantsId")
+      .then((res) => {
+        setRestaurants(res.data)  
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      }).finally(() => {
+        setLoading(false)
+      })
+  }
+*/
   const fetchDataAvgAgePerGender = () => {
     setLoading(true)
     axios.get("http://127.0.0.1:5000/age_average_per_gender")
@@ -201,21 +243,31 @@ const Recipes = () => {
                     <input className={inputText} value={title} onChange={(e) => setTitle(e.target.value)} type="text"
                     placeholder='Nombre de la receta' />
                 </div>
-                <div className={inputContainer}>
+                <div className={inputContainerMenu}>
                     <i className="material-icons prefix">filter_9_plus</i>
-                    <select className={selectText} value={ingredients} onChange={(e) => setIngredients(e.target.value)}>
-                        <option value="" disabled>Ingredientes</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
+                    <ElementsMenu 
+                      menu={"Ingredientes"}
+                      selectedElements={ingredients}
+                      setSelectedElements={setIngredients} 
+                      newElement={newIngredient}
+                      setNewElement={setNewIngredient} 
+                      availableElements={availableIngredients}
+                      setAvailableElements={setAvailableIngredients}
+                      allowAdd={true}
+                      />
                 </div>
-                <div className={inputContainer}>
+                <div className={inputContainerMenu}>
                     <i className="material-icons prefix">filter_9_plus</i>
-                    <select className={selectText} value={directions} onChange={(e) => setDirections(e.target.value)}>
-                        <option value="" disabled>Instrucciones</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
+                    <ElementsMenu 
+                      menu={"Indicaciones"}
+                      selectedElements={directions}
+                      setSelectedElements={setDirections} 
+                      newElement={newDirections}
+                      setNewElement={setNewDirections} 
+                      availableElements={availableDirections}
+                      setAvailableElements={setAvailableDirections}
+                      allowAdd={true}
+                      />
                 </div>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">alarm_on</i>
@@ -228,21 +280,30 @@ const Recipes = () => {
                 </div>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">alarm</i>
-                    <input className={inputText} value={prep_time} onChange={(e) => setPrep_time(e.target.value)} type="number"
+                    <input className={inputText} value={prep_time} onChange={(e) => setPrep_time(parseInt(e.target.value,10))} type="number"
                       placeholder='Tiempo de preparación (min)' />
                 </div>
               </div>
               <div className={formGrid} style={{marginTop: "10px"}}>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">local_offer</i>
-                    <input className={inputText} value={price} onChange={(e) => setPrice(e.target.value)} type="number"
+                    <input className={inputText} value={price} onChange={(e) => setPrice(parseFloat(e.target.value))} type="number"
                       placeholder='Precio ($)' />
                 </div>
-                <div className={inputContainer}>
+                <div className={inputContainerMenu}>
                     <i className="material-icons prefix">filter_9_plus</i>
-                    <input className={inputText} value={restaurants} onChange={(e) => setRestaurants(e.target.value)} type="text"
-                        placeholder='Restaurantes' />
-                    <div className={buttonContainer} style={{marginLeft: "1vw"}}>
+                    
+                    <ElementsMenuId
+                      menu={"Restaurantes"}
+                      selectedElements={menuRestaurants}
+                      setSelectedElements={setMenuRestaurants} 
+                      newElement={newRestaurants}
+                      setNewElement={setNewRestaurants} 
+                      availableElements={availableRestaurants}
+                      setAvailableElements={setAvailableRestaurants}
+                      allowAdd={false}
+                      />
+                    <div className={buttonContainer} style={{marginLeft: "22.5vw", marginTop: "-2vh"}}>
                         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Enviar 
                             <i className="material-icons right">send</i>
                         </button>
@@ -258,7 +319,7 @@ const Recipes = () => {
               <div className={buttonContainer}>
                   <button className=" btn btn-sm btn-primary waves-effect waves-light right"  name="action" 
                   onClick={() => fetchData(limit)}>Limitar 
-                    <i className="material-icons prefix" style={{marginLeft: "0.3vw"}}>filter_9_plus</i>
+                    <i className="material-icons prefix" style={{marginLeft: "0.3vw"}}>remove_circle_outline</i>
                   </button>
               </div>
           </div>
@@ -302,7 +363,16 @@ const Recipes = () => {
                         <td>{recipe.country}</td>
                         <td>{recipe.prep_time}</td>
                         <td>{recipe.price}</td>
-                        <td>{recipe.restaurants}</td>
+                        <td>{recipe.restaurants ? (
+                              <ol>
+                                {recipe.restaurants.map((restaurant , index) => (
+                                  <li key={index}>{restaurant.name}</li>
+                                ))}
+                              </ol>
+                            ) : (
+                              <p>No hay restaurantes disponibles.</p>
+                            )}
+                          </td>
                         <td>
                           <button onClick={() => editrecipes(recipe._ID)} className={editButton} type="submit" name="action">
                             <i className="material-icons ">edit</i>
@@ -369,7 +439,7 @@ const Recipes = () => {
       <div className={buttonContainerOptions}>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('verUsuarios')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>person</i> Ver usuarios
+            <i className="material-icons right" style={{marginRight: "1vh"}}>local_dining</i> Ver recetas
         </button>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('agruparPorPais')}>
