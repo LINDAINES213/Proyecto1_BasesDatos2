@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { buttonContainer, inputContainer, inputText, selectText, crud, leftAligned, editButton, scrollableTable,
   formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit
  } from './Recipes.module.css'
-import { Loading } from '../../components'
+import { Loading, ElementsMenu } from '../../components'
 import axios from 'axios'
 
 const Recipes = () => {
@@ -197,35 +197,52 @@ const Recipes = () => {
             <form onSubmit={(e) => submit(e, id)}>
               <div className={formGrid}>
                 <div className={inputContainer}>
-                    <i className="material-icons prefix">person</i>
-                    <input className={inputText} value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder='Nombre' />
+                    <i className="material-icons prefix">local_dining</i>
+                    <input className={inputText} value={title} onChange={(e) => setTitle(e.target.value)} type="text"
+                    placeholder='Nombre de la receta' />
                 </div>
                 <div className={inputContainer}>
-                    <i className="material-icons prefix">cake</i>
-                    <input className={inputText} value={ingredients} onChange={(e) => setIngredients(parseInt(e.target.value,10))} type="number"
-                     placeholder='Edad' />
-                </div>
-                <div className={inputContainer}>
-                    <i className="material-icons prefix">wc</i>
-                    <select className={selectText} value={directions} onChange={(e) => setDirections(e.target.value)}>
-                        <option value="" disabled>Seleccionar género</option>
+                    <i className="material-icons prefix">filter_9_plus</i>
+                    <select className={selectText} value={ingredients} onChange={(e) => setIngredients(e.target.value)}>
+                        <option value="" disabled>Ingredientes</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
                 </div>
                 <div className={inputContainer}>
-                    <i className="material-icons prefix">mail</i>
-                    <input className={inputText} value={prep_time} onChange={(e) => setPrep_time(e.target.value)} type="email" placeholder='Correo' />
+                    <i className="material-icons prefix">filter_9_plus</i>
+                    <select className={selectText} value={directions} onChange={(e) => setDirections(e.target.value)}>
+                        <option value="" disabled>Instrucciones</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div className={inputContainer}>
+                    <i className="material-icons prefix">alarm_on</i>
+                    <input className={inputText} value={cook_time} onChange={(e) => setCook_time(parseInt(e.target.value,10))} type="number"
+                     placeholder='Tiempo de cocina (min)' />
                 </div>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">location_on</i>
                     <input className={inputText} value={country} onChange={(e) => setCountry(e.target.value)} type="text" placeholder='País' />
                 </div>
                 <div className={inputContainer}>
-                    <i className="material-icons prefix">contact_phone</i>
-                    <input className={inputText} value={cook_time} onChange={(e) => setCook_time(e.target.value)} type="tel"
-                        placeholder='Teléfono' />
-                    <div className={buttonContainer}>
+                    <i className="material-icons prefix">alarm</i>
+                    <input className={inputText} value={prep_time} onChange={(e) => setPrep_time(e.target.value)} type="number"
+                      placeholder='Tiempo de preparación (min)' />
+                </div>
+              </div>
+              <div className={formGrid} style={{marginTop: "10px"}}>
+                <div className={inputContainer}>
+                    <i className="material-icons prefix">local_offer</i>
+                    <input className={inputText} value={price} onChange={(e) => setPrice(e.target.value)} type="number"
+                      placeholder='Precio ($)' />
+                </div>
+                <div className={inputContainer}>
+                    <i className="material-icons prefix">filter_9_plus</i>
+                    <input className={inputText} value={restaurants} onChange={(e) => setRestaurants(e.target.value)} type="text"
+                        placeholder='Restaurantes' />
+                    <div className={buttonContainer} style={{marginLeft: "1vw"}}>
                         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Enviar 
                             <i className="material-icons right">send</i>
                         </button>
@@ -239,13 +256,13 @@ const Recipes = () => {
               <input className={inputTextSmall} value={limit} onChange={(e) => setLimit(e.target.value)} 
                 type="number" placeholder='Cantidad:' />
               <div className={buttonContainer}>
-                  <button className=" btn btn-sm btn-primary waves-effect waves-light right" name="action" 
+                  <button className=" btn btn-sm btn-primary waves-effect waves-light right"  name="action" 
                   onClick={() => fetchData(limit)}>Limitar 
-                    <i className="material-icons prefix" style={{marginLeft: "0.3vw"}}>remove_circle_outline</i>
+                    <i className="material-icons prefix" style={{marginLeft: "0.3vw"}}>filter_9_plus</i>
                   </button>
               </div>
           </div>
-          <div className={scrollableTable}>
+          <div className={scrollableTable} style={{maxHeight: "41vh"}}>
             <table className='table'>
               <thead>
                 <th>Receta</th>
