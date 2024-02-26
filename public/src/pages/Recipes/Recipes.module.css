@@ -116,14 +116,19 @@ table {
     border: 1px solid black;
     padding: 8px;
     color: #000000;
-
     text-align: center; /* Centra horizontalmente el contenido */
+    font-size: x-small;
   }
 
   /* Alineación a la izquierda para celdas específicas */
   td.leftAligned {
     color: #000000;
     text-align: left;
+  }
+
+  ol {
+    margin: 1vw;
+    padding: 0;
   }
   
   th {

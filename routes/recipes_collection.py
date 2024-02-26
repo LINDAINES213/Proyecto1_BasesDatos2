@@ -16,11 +16,11 @@ def getpost():
         if limit > 0:
             for i in db.find().sort("title", 1).limit(limit):
                 restaurant_ids = str(i["restaurants"])
-                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
+                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time":i["cook_time (min)"], "country":i["country"], "prep_time":i["prep_time (min)"], "price":i["price ($)"], "restaurants": restaurant_ids})
         else:
             for i in db.find().sort("title", 1):
                 restaurant_ids = str(i["restaurants"])
-                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time (min)":i["cook_time (min)"], "country":i["country"], "prep_time (min)":i["prep_time (min)"], "price ($)":i["price ($)"], "restaurants": restaurant_ids})
+                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time":i["cook_time (min)"], "country":i["country"], "prep_time":i["prep_time (min)"], "price":i["price ($)"], "restaurants": restaurant_ids})
         return jsonify(o)
     elif request.method == "POST":
         restaurant_ids = ast.literal_eval(request.json["restaurants"])
@@ -33,7 +33,7 @@ def getpost():
 
         restaurant_ids = [ObjectId(oid) for oid in object_ids]'''
 
-        id = db.insert_one({"title": request.json["title"], "ingredients": request.json["ingredients"], "directions": request.json["directions"], "cook_time (min)": request.json["cook_time (min)"], "country": request.json["country"], "prep_time (min)": request.json["prep_time (min)"], "price ($)": request.json["price ($)"], "restaurants": restaurant_ids})
+        id = db.insert_one({"title": request.json["title"], "ingredients": request.json["ingredients"], "directions": request.json["directions"], "cook_time": request.json["cook_time (min)"], "country": request.json["country"], "prep_time": request.json["prep_time (min)"], "price": request.json["price ($)"], "restaurants": restaurant_ids})
         inserted_id = id.inserted_id
         return jsonify({"_id": str(inserted_id)})
         
@@ -61,10 +61,10 @@ def deleteput(id):
             "title": request.json["title"],
             "ingredients": request.json["ingredients"],
             "directions": request.json["directions"],
-            "cook_time (min)": request.json["cook_time (min)"],
+            "cook_time": request.json["cook_time (min)"],
             "country": request.json["country"],
-            "prep_time (min)": request.json["prep_time (min)"],
-            "price ($)": request.json["price ($)"],
+            "prep_time": request.json["prep_time (min)"],
+            "price": request.json["price ($)"],
             "restaurants": restaurant_ids}})
         return jsonify({"message": "Updated"})
     
@@ -75,7 +75,7 @@ def editrecipes(id):
     res = db.find_one({"_id": ObjectId(id)})
     restaurant_ids = str(res["restaurants"])
     print(res)
-    return {"_ID": str(ObjectId(res["_id"])), "title":res["title"], "ingredients":res["ingredients"], "directions":res["directions"], "cook_time (min)":res["cook_time (min)"], "country":res["country"], "prep_time (min)":res["prep_time (min)"], "price ($)":res["price ($)"], "restaurants": restaurant_ids}
+    return {"_ID": str(ObjectId(res["_id"])), "title":res["title"], "ingredients":res["ingredients"], "directions":res["directions"], "cook_time":res["cook_time (min)"], "country":res["country"], "prep_time":res["prep_time (min)"], "price":res["price ($)"], "restaurants": restaurant_ids}
 
 @recipes_bp.route('/check_recipeId', methods=["GET"])
 def check_recipeId():
