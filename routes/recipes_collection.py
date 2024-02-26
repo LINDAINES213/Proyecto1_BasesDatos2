@@ -13,14 +13,28 @@ def getpost():
     if request.method == "GET":
         limit = int(request.args.get('limit', 0))
         o = []
+        pipeline = [
+            {"$lookup": { 
+                "from": "restaurants", 
+                "localField": "restaurants", 
+                "foreignField": "_id", 
+                "as": "restaurant_name" 
+                }
+            },
+            {"$sort":{ "title": 1}},
+        ]
         if limit > 0:
-            for i in db.find().sort("title", 1).limit(limit):
-                restaurant_ids = str(i["restaurants"])
-                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time":i["cook_time (min)"], "country":i["country"], "prep_time":i["prep_time (min)"], "price":i["price ($)"], "restaurants": restaurant_ids})
+            pipeline.append({"$limit": limit})
+            result = db.aggregate(pipeline)
+            for i in result:
+                restaurantes = [{"id": str(restaurant["_id"]), "name": restaurant["name"]} for restaurant in i["restaurant_name"]]
+
+                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time":i["cook_time (min)"], "country":i["country"], "prep_time":i["prep_time (min)"], "price":i["price ($)"], "restaurants": restaurantes})
         else:
-            for i in db.find().sort("title", 1):
-                restaurant_ids = str(i["restaurants"])
-                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time":i["cook_time (min)"], "country":i["country"], "prep_time":i["prep_time (min)"], "price":i["price ($)"], "restaurants": restaurant_ids})
+            result = db.aggregate(pipeline)
+            for i in result:
+                restaurantes = [{"id": str(restaurant["_id"]), "name": restaurant["name"]} for restaurant in i["restaurant_name"]]
+                o.append({"_ID": str(ObjectId(i["_id"])), "title":i["title"], "ingredients":i["ingredients"], "directions":i["directions"], "cook_time":i["cook_time (min)"], "country":i["country"], "prep_time":i["prep_time (min)"], "price":i["price ($)"], "restaurants": restaurantes})
         return jsonify(o)
     elif request.method == "POST":
         restaurant_ids = ast.literal_eval(request.json["restaurants"])
