@@ -11,12 +11,46 @@ def getpost():
     if request.method == "GET":
         limit = int(request.args.get('limit', 0))
         o = []
+        pipeline = [
+            {"$lookup": { 
+                "from": "restaurants", 
+                "localField": "id_restaurant", 
+                "foreignField": "_id", 
+                "as": "restaurant_name" 
+                }
+            },
+            {"$lookup": { 
+                "from": "recipes", 
+                "localField": "id_recipe", 
+                "foreignField": "_id", 
+                "as": "recipe_name" 
+                }
+            },
+            {"$lookup": { 
+                "from": "users", 
+                "localField": "id_user", 
+                "foreignField": "_id", 
+                "as": "user_name" 
+                }
+            },
+            {"$sort":{ "date": -1}},
+        ]
         if limit > 0: 
-            for i in db.find().sort("date", -1).limit(limit):
-                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": str(ObjectId(i["id_recipe"])), "id_restaurant": str(ObjectId(i["id_restaurant"])), "id_user": str(ObjectId(i["id_user"])), "quantity":i["quantity"], "price ($)":i["price ($)"], "total ($)":i["total ($)"]})
+            pipeline.append({"$limit": limit})
+            result = db.aggregate(pipeline)
+            for i in result:
+                restaurante = [{"id": str(restaurant["_id"]), "name": restaurant["name"]} for restaurant in i["restaurant_name"]]
+                receta = [{"id": str(recipe["_id"]), "title": recipe["title"]} for recipe in i["recipe_name"]]
+                usuario = [{"id": str(user["_id"]), "name": user["name"]} for user in i["user_name"]]
+
+                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": receta, "id_restaurant": restaurante, "id_user": usuario, "quantity":i["quantity"], "price ($)":i["price ($)"], "total ($)":i["total ($)"]})
         else:
-            for i in db.find().sort("date", -1):
-                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": str(ObjectId(i["id_recipe"])), "id_restaurant": str(ObjectId(i["id_restaurant"])), "id_user": str(ObjectId(i["id_user"])), "quantity":i["quantity"], "price ($)":i["price ($)"], "total ($)":i["total ($)"]})
+            result = db.aggregate(pipeline)
+            for i in result:
+                restaurante = [{"id": str(restaurant["_id"]), "name": restaurant["name"]} for restaurant in i["restaurant_name"]]
+                receta = [{"id": str(recipe["_id"]), "title": recipe["title"]} for recipe in i["recipe_name"]]
+                usuario = [{"id": str(user["_id"]), "name": user["name"]} for user in i["user_name"]]
+                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": receta, "id_restaurant": restaurante, "id_user": usuario, "quantity":i["quantity"], "price ($)":i["price ($)"], "total ($)":i["total ($)"]})
         return jsonify(o)
     elif request.method == "POST":
         date_str = request.json.get("date")
@@ -50,8 +84,23 @@ def editsales(id):
     db = mongo.db.sales
     res = db.find_one({"_id": ObjectId(id)})
     date_str = str(res["date"])
+
+    recipe = mongo.db.recipes.find_one({"_id": res["id_recipe"]}) 
+    restaurant = mongo.db.restaurants.find_one({"_id": res["id_restaurant"]})
+    user = mongo.db.users.find_one({"_id": res["id_user"]})
+
+    recipe = [{"id": str(res["id_recipe"]),"title": recipe["title"]}]
+    restaurant = [{"id": str(res["id_restaurant"]), "name": restaurant["name"]}]
+    user = [{"id": str(res["id_user"]), "name": user["name"]}]
+
     print(res)
-    return {"_ID": str(ObjectId(res["_id"])), "date": date_str, "id_recipe": str(res["id_recipe"]), "id_restaurant": str(res["id_restaurant"]), "id_user": str(res["id_user"]), "quantity":res["quantity"], "price ($)":res["price ($)"], "total ($)":res["total ($)"]}
+    return {"_ID": str(ObjectId(res["_id"])), "date": date_str,
+    "recipe": recipe,
+    "restaurant": restaurant,
+    "user": user,
+    "quantity": res["quantity"],
+    "price ($)": res["price ($)"],
+    "total ($)": res["total ($)"]}
 
 @sales_bp.route('/total_sales_per_recipe', methods=["GET"])
 def total_sales_per_recipe():
