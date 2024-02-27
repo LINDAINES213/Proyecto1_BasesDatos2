@@ -13,10 +13,10 @@ def getpost():
         o = []
         if limit > 0: 
             for i in db.find().sort("date", -1).limit(limit):
-                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": str(ObjectId(i["id_recipe"])), "id_restaurant": str(ObjectId(i["id_restaurant"])), "id_user": str(ObjectId(i["id_user"])), "quantity":i["quantity"], "price ($)":i["price ($)"], "total ($)":i["total ($)"]})
+                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": str(ObjectId(i["id_recipe"])), "id_restaurant": str(ObjectId(i["id_restaurant"])), "id_user": str(ObjectId(i["id_user"])), "quantity":i["quantity"], "price":i["price ($)"], "total":i["total ($)"]})
         else:
             for i in db.find().sort("date", -1):
-                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": str(ObjectId(i["id_recipe"])), "id_restaurant": str(ObjectId(i["id_restaurant"])), "id_user": str(ObjectId(i["id_user"])), "quantity":i["quantity"], "price ($)":i["price ($)"], "total ($)":i["total ($)"]})
+                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": str(ObjectId(i["id_recipe"])), "id_restaurant": str(ObjectId(i["id_restaurant"])), "id_user": str(ObjectId(i["id_user"])), "quantity":i["quantity"], "price":i["price ($)"], "total":i["total ($)"]})
         return jsonify(o)
     elif request.method == "POST":
         date_str = request.json.get("date")

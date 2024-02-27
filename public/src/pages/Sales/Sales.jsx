@@ -6,7 +6,7 @@ import { Loading } from '../../components'
 import axios from 'axios'
 
 const Sales = () => {
-  const [restaurants, setRestaurants] = useState([])
+  const [sales, setSales] = useState([])
   const [id, setId] = useState(0)
   const [name, setName] = useState('')
   const [country, setCountry] = useState('')
@@ -26,7 +26,7 @@ const Sales = () => {
         break
       case 'agruparPorEstrellasPromedio':
         fetchDataStarsAvgPerCuisine()
-        console.log(restaurants)
+        console.log(sales)
         break
       case 'edadPromedioPorGenero':
         fetchDataAvgAgePerGender()
@@ -38,10 +38,10 @@ const Sales = () => {
 
   useEffect(() => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/restaurants")
+    axios.get("http://127.0.0.1:5000/sales")
       .then((res) => {
         console.log(res.data)
-        setRestaurants(res.data)
+        setSales(res.data)
         setId(0)
         setName('')
         setCountry('')
@@ -60,7 +60,7 @@ const Sales = () => {
     console.log("estrellas",stars)
     event.preventDefault()
     if (id === 0) {
-      axios.post("http://127.0.0.1:5000/restaurants", {
+      axios.post("http://127.0.0.1:5000/sales", {
         name,
         country,
         stars,
@@ -77,7 +77,7 @@ const Sales = () => {
         setMale('')
       })
     } else {
-      axios.put(`http://127.0.0.1:5000/restaurants/${id}`, {
+      axios.put(`http://127.0.0.1:5000/sales/${id}`, {
         name,
         country,
         stars,
@@ -97,14 +97,14 @@ const Sales = () => {
   }
   
   const deleteData = (id) => {
-    axios.delete(`http://127.0.0.1:5000/restaurants/${id}`)
+    axios.delete(`http://127.0.0.1:5000/sales/${id}`)
       .then(() => {
         fetchData()
       })
   }
 
   const editusers = (id) => {
-    axios.get(`http://127.0.0.1:5000/editrestaurant/${id}`)
+    axios.get(`http://127.0.0.1:5000/editsales/${id}`)
       .then((res) => {
         setName(res.data.name),
         setCountry(res.data.country),
@@ -121,12 +121,12 @@ const Sales = () => {
     const parsedLimit = parseInt(limit)
     const isLimitInteger = !isNaN(parsedLimit) && Number.isInteger(parsedLimit)  
     const url = isLimitInteger
-      ? `http://127.0.0.1:5000/restaurants?limit=${limit}`
-      : 'http://127.0.0.1:5000/restaurants'
+      ? `http://127.0.0.1:5000/sales?limit=${limit}`
+      : 'http://127.0.0.1:5000/sales'
   
     axios.get(url)
       .then((res) => {
-        setRestaurants(res.data)
+        setSales(res.data)
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -141,7 +141,7 @@ const Sales = () => {
     setLoading(true)
     axios.get("http://127.0.0.1:5000/stars_average_per_cuisine")
       .then((res) => {
-        setRestaurants(res.data)
+        setSales(res.data)
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -156,7 +156,7 @@ const Sales = () => {
     axios.get("http://127.0.0.1:5000/age_average_per_gender")
       .then((res) => {
         console.log("res",res)
-        setRestaurants(res.data)
+        setSales(res.data)
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -168,7 +168,7 @@ const Sales = () => {
 
   const renderTable = () => {
     if (loading) {
-      console.log("info", restaurants)
+      console.log("info", sales)
       return (
         <div className={centeredDiv}>
           <Loading />
@@ -241,29 +241,35 @@ const Sales = () => {
           <div className={scrollableTable}>
             <table className='table'>
               <thead>
-                <th>Nombre</th>
-                <th>País</th>
-                <th>Estrellas</th>
-                <th>Cantidad de mujeres</th>
-                <th>Cantidad de hombres</th>
+                <th>Id de venta</th>
+                <th>Fecha de venta</th>
+                <th>Id de la receta</th>
+                <th>Id del restaurante</th>
+                <th>Id del usuario</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Total</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
               </thead>
               <tbody>
-                {restaurants.map(rest =>
-                      <tr key={rest._ID}>
-                        <td className={leftAligned}>{rest.name}</td>
-                        <td>{rest.country}</td>
-                        <td>{rest.stars}</td>
-                        <td>{rest.employees_quantity.Female}</td>
-                        <td>{rest.employees_quantity.Male}</td>
+                {sales.map(sale =>
+                      <tr key={sale._ID}>
+                        <td className={leftAligned}>{sale._ID}</td>
+                        <td>{sale.date}</td>
+                        <td>{sale.id_recipe}</td>
+                        <td>{sale.id_restaurant}</td>
+                        <td>{sale.id_user}</td>
+                        <td>{sale.quantity}</td>
+                        <td>{sale.price}</td>
+                        <td>{sale.total}</td>
                         <td>
-                          <button onClick={() => editusers(rest._ID)} className={editButton} type="submit" name="action">
+                          <button onClick={() => editusers(sale._ID)} className={editButton} type="submit" name="action">
                             <i className="material-icons ">edit</i>
                           </button>
                         </td>
                         <td>
-                          <button onClick={() => deleteData(rest._ID)} className="btn btn-sm btn-danger waves-light " type="submit" name="action">
+                          <button onClick={() => deleteData(sale._ID)} className="btn btn-sm btn-danger waves-light " type="submit" name="action">
                             <i className="material-icons ">delete</i>
                           </button>
                         </td>
@@ -283,11 +289,11 @@ const Sales = () => {
                 <th>Estrellas promedio</th>
               </thead>
               <tbody>
-                {restaurants.map(rest =>
-                      <tr key={rest._id}>
-                        <td className={leftAligned}>{rest._id}</td>
-                        <td>{rest.avg_stars}</td>
-                      </tr>
+                {sales.map(sale =>
+                  <tr key={sale._id}>
+                    <td className={leftAligned}>{sale._id}</td>
+                    <td>{sale.avg_stars}</td>
+                  </tr>
                 )}
               </tbody>
             </table>
@@ -304,7 +310,7 @@ const Sales = () => {
       <div className={buttonContainerOptions}>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('verUsuarios')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>local_dining</i> Ver restaurantes
+            <i className="material-icons right" style={{marginRight: "1vh"}}>local_dining</i> Ver ventas
         </button>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('agruparPorEstrellasPromedio')}>
