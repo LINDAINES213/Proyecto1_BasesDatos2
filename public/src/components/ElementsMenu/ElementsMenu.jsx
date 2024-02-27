@@ -34,8 +34,8 @@ const ElementsMenu = ({
 
   return (
     <div style={{ position: 'relative' }}>
-      <div className="dropdown" style={{ top: '-3vh', left: '0.5vw', position: 'absolute', zIndex: 1 }}>
-        <button className={buttonMenu} onClick={() => setIsMenuVisible(!isMenuVisible)}>
+      <div className="dropdown" style={{ top: '-3vh', left: '0.5vw', position: 'absolute', zIndex: 2 }}>
+        <button type="button" className={buttonMenu} onClick={() => setIsMenuVisible(!isMenuVisible)}>
           {menu}
         </button>
         {isMenuVisible && (
@@ -60,7 +60,7 @@ const ElementsMenu = ({
                   onChange={(e) => setNewElement(e.target.value)}
                   placeholder="Nuevo elemento"
                 />
-                <button onClick={handleAddElement}>Agregar</button>
+                <button type="button" onClick={handleAddElement}>Agregar</button>
               </div>
             )}
           </div>

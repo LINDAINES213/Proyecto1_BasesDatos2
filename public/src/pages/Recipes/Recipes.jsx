@@ -15,24 +15,22 @@ const Recipes = () => {
   const [country, setCountry] = useState('')
   const [prep_time, setPrep_time] = useState('')
   const [price, setPrice] = useState('')
-  const [restaurants, setRestaurants] = useState([])
+  const [restaurants, setRestaurants] = useState('')
   const [limit, setLimit] = useState()
   const [selectedOption, setSelectedOption] = useState('verUsuarios')
   const [loading, setLoading] = useState(false)
-  const [menuRestaurants, setMenuRestaurants] = useState([{name:"Restaurante1", _id: "121322" }, {name:"Restaurante2", _id: "5555"}])
+  const [menuRestaurants, setMenuRestaurants] = useState([])
   const [newIngredient, setNewIngredient] = useState('')
   const [availableIngredients, setAvailableIngredients] = useState([])
   const [newDirections, setNewDirections] = useState('')
   const [availableDirections, setAvailableDirections] = useState([])
   const [newRestaurants, setNewRestaurants] = useState('')
-  const [availableRestaurants, setAvailableRestaurants] = useState([{name:"Restaurante1", _id: "121322" }, {name:"Restaurante2", _id: "5555"}])
-
-
-  const allIdsInMenuRef = useRef([])
+  const [availableRestaurants, setAvailableRestaurants] = useState([])
 
   useEffect(() => {
     // Calcula los _id y almacénalos en la referencia
-    allIdsInMenuRef.current = menuRestaurants.map(item => item._id)
+    setRestaurants('[' + menuRestaurants.map(item => `'${item._id}'`).join(', ') + ']')
+    console.log("p", menuRestaurants)
   }, [menuRestaurants])
 
 
@@ -69,6 +67,9 @@ const Recipes = () => {
         setPrep_time('')
         setPrice('')
         setRestaurants('')
+        setMenuRestaurants([])  
+        setAvailableDirections([])
+        setAvailableIngredients([])   
       })
       .catch((error) => {
         console.error('Error fetching recipes data:', error)
@@ -91,6 +92,7 @@ const Recipes = () => {
   const submit = (event, id) => {
     event.preventDefault()
     if (id === 0) {
+      console.log("r ",restaurants)
       axios.post("http://127.0.0.1:5000/recipes", {
         title,
         ingredients,
@@ -99,7 +101,7 @@ const Recipes = () => {
         country,
         prep_time,
         price,
-        allIdsInMenu,
+        restaurants,
       }).then(() => {
         fetchData()
         setTitle('')
@@ -110,7 +112,9 @@ const Recipes = () => {
         setPrep_time('')
         setPrice('')
         setRestaurants('')
-        setMenuRestaurants('')     
+        setMenuRestaurants([])  
+        setAvailableDirections([])
+        setAvailableIngredients([]) 
       })
     } else {
       axios.put(`http://127.0.0.1:5000/recipes/${id}`, {
@@ -131,7 +135,10 @@ const Recipes = () => {
         setCountry('')
         setPrep_time('')
         setPrice('')
-        setRestaurants('')     
+        setRestaurants('') 
+        setMenuRestaurants([])  
+        setAvailableDirections([])  
+        setAvailableIngredients([])     
       })
     }
   }
@@ -146,14 +153,22 @@ const Recipes = () => {
   const editrecipes = (id) => {
     axios.get(`http://127.0.0.1:5000/editrecipes/${id}`)
       .then((res) => {
-        setTitle('')
-        setIngredients('')
-        setDirections('')
-        setCook_time('')
-        setCountry('')
-        setPrep_time('')
-        setPrice('')
-        setRestaurants('')     
+        setTitle(res.data.title)
+        setIngredients(res.data.ingredients)
+        setDirections(res.data.directions)
+        setCook_time(res.data.cook_time)
+        setCountry(res.data.country)
+        setPrep_time(res.data.prep_time)
+        setPrice(res.data.price)
+        console.log("info",res)
+        //setRestaurants(res.data.restaurants)
+        setMenuRestaurants(res.data.restaurants.map(restaurant => ({
+          ...restaurant,
+            id: `'`+restaurant._id +`'`,
+            name: `'`+restaurant.name + `'`
+        })))
+        setAvailableDirections(res.data.directions)
+        setAvailableIngredients(res.data.ingredients)      
         setId(res.data._ID)
       })
   }
@@ -292,7 +307,6 @@ const Recipes = () => {
                 </div>
                 <div className={inputContainerMenu}>
                     <i className="material-icons prefix">filter_9_plus</i>
-                    
                     <ElementsMenuId
                       menu={"Restaurantes"}
                       selectedElements={menuRestaurants}
@@ -365,8 +379,8 @@ const Recipes = () => {
                         <td>{recipe.price}</td>
                         <td>{recipe.restaurants ? (
                               <ol>
-                                {recipe.restaurants.map((restaurant , index) => (
-                                  <li key={index}>{restaurant.name}</li>
+                                {recipe.restaurants.map((restaurant) => (
+                                  <li key={restaurant.id}>{restaurant.name}</li>
                                 ))}
                               </ol>
                             ) : (

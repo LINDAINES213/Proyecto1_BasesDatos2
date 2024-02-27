@@ -3,7 +3,6 @@ from bson import ObjectId
 import ast
 import re
 
-
 recipes_bp = Blueprint('recipes', __name__)
 
 @recipes_bp.route("/recipes", methods=["GET", "POST"])
@@ -47,7 +46,7 @@ def getpost():
 
         restaurant_ids = [ObjectId(oid) for oid in object_ids]'''
 
-        id = db.insert_one({"title": request.json["title"], "ingredients": request.json["ingredients"], "directions": request.json["directions"], "cook_time": request.json["cook_time (min)"], "country": request.json["country"], "prep_time": request.json["prep_time (min)"], "price": request.json["price ($)"], "restaurants": restaurant_ids})
+        id = db.insert_one({"title": request.json["title"], "ingredients": request.json["ingredients"], "directions": request.json["directions"], "cook_time (min)": request.json["cook_time"], "country": request.json["country"], "prep_time (min)": request.json["prep_time"], "price ($)": request.json["price"], "restaurants": restaurant_ids})
         inserted_id = id.inserted_id
         return jsonify({"_id": str(inserted_id)})
         
