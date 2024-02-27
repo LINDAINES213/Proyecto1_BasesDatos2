@@ -38,7 +38,7 @@ const CRUDoperations = () => {
 
   useEffect(() => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/users")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/users")
       .then((res) => {
         setUsers(res.data)
         setId(0)
@@ -59,7 +59,7 @@ const CRUDoperations = () => {
   const submit = (event, id) => {
     event.preventDefault()
     if (id === 0) {
-      axios.post("http://127.0.0.1:5000/users", {
+      axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/users", {
         name,
         age,
         gender,
@@ -78,7 +78,7 @@ const CRUDoperations = () => {
         setPhone('')
       })
     } else {
-      axios.put(`http://127.0.0.1:5000/users/${id}`, {
+      axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/users/${id}`, {
         name,
         age,
         gender,
@@ -100,14 +100,14 @@ const CRUDoperations = () => {
   }
   
   const deleteData = (id) => {
-    axios.delete(`http://127.0.0.1:5000/users/${id}`)
+    axios.delete(`https://proyecto-basesdatos2-uvg.koyeb.app/users/${id}`)
       .then(() => {
         fetchData()
       })
   }
 
   const editusers = (id) => {
-    axios.get(`http://127.0.0.1:5000/editusers/${id}`)
+    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editusers/${id}`)
       .then((res) => {
         setName(res.data.name),
         setAge(res.data.age),
@@ -125,8 +125,8 @@ const CRUDoperations = () => {
     const parsedLimit = parseInt(limit)
     const isLimitInteger = !isNaN(parsedLimit) && Number.isInteger(parsedLimit)  
     const url = isLimitInteger
-      ? `http://127.0.0.1:5000/users?limit=${limit}`
-      : 'http://127.0.0.1:5000/users'
+      ? `https://proyecto-basesdatos2-uvg.koyeb.app/users?limit=${limit}`
+      : 'https://proyecto-basesdatos2-uvg.koyeb.app/users'
   
     axios.get(url)
       .then((res) => {
@@ -143,7 +143,7 @@ const CRUDoperations = () => {
   
   const fetchDataPerCountry = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/users_per_country")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/users_per_country")
       .then((res) => {
         setUsers(res.data)
       })
@@ -157,7 +157,7 @@ const CRUDoperations = () => {
 
   const fetchDataAvgAgePerGender = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/age_average_per_gender")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/age_average_per_gender")
       .then((res) => {
         console.log("res",res)
         setUsers(res.data)

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable,
   formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit, inputTextSlider
- } from './Restaurants.module.css'
+ } from './Sales.module.css'
 import { Loading } from '../../components'
 import axios from 'axios'
 
-const Restaurants = () => {
-  const [restaurants, setRestaurants] = useState([])
+const Sales = () => {
+  const [sales, setSales] = useState([])
   const [id, setId] = useState(0)
   const [name, setName] = useState('')
   const [country, setCountry] = useState('')
@@ -26,7 +26,6 @@ const Restaurants = () => {
         break
       case 'agruparPorEstrellasPromedio':
         fetchDataStarsAvgPerCuisine()
-        console.log(restaurants)
         break
       case 'edadPromedioPorGenero':
         fetchDataAvgAgePerGender()
@@ -38,10 +37,9 @@ const Restaurants = () => {
 
   useEffect(() => {
     setLoading(true)
-    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/restaurants")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/sales")
       .then((res) => {
-        console.log(res.data)
-        setRestaurants(res.data)
+        setSales(res.data)
         setId(0)
         setName('')
         setCountry('')
@@ -57,10 +55,9 @@ const Restaurants = () => {
   }, [])
 
   const submit = (event, id) => {
-    console.log("estrellas",stars)
     event.preventDefault()
     if (id === 0) {
-      axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/restaurants", {
+      axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/sales", {
         name,
         country,
         stars,
@@ -77,7 +74,7 @@ const Restaurants = () => {
         setMale('')
       })
     } else {
-      axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/restaurants/${id}`, {
+      axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/sales/${id}`, {
         name,
         country,
         stars,
@@ -97,14 +94,14 @@ const Restaurants = () => {
   }
   
   const deleteData = (id) => {
-    axios.delete(`https://proyecto-basesdatos2-uvg.koyeb.app/restaurants/${id}`)
+    axios.delete(`https://proyecto-basesdatos2-uvg.koyeb.app/sales/${id}`)
       .then(() => {
         fetchData()
       })
   }
 
   const editusers = (id) => {
-    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editrestaurant/${id}`)
+    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editsales/${id}`)
       .then((res) => {
         setName(res.data.name),
         setCountry(res.data.country),
@@ -121,12 +118,12 @@ const Restaurants = () => {
     const parsedLimit = parseInt(limit)
     const isLimitInteger = !isNaN(parsedLimit) && Number.isInteger(parsedLimit)  
     const url = isLimitInteger
-      ? `https://proyecto-basesdatos2-uvg.koyeb.app/restaurants?limit=${limit}`
-      : 'https://proyecto-basesdatos2-uvg.koyeb.app/restaurants'
+      ? `https://proyecto-basesdatos2-uvg.koyeb.app/sales?limit=${limit}`
+      : 'https://proyecto-basesdatos2-uvg.koyeb.app/sales'
   
     axios.get(url)
       .then((res) => {
-        setRestaurants(res.data)
+        setSales(res.data)
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -141,7 +138,7 @@ const Restaurants = () => {
     setLoading(true)
     axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/stars_average_per_cuisine")
       .then((res) => {
-        setRestaurants(res.data)
+        setSales(res.data)
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -156,7 +153,7 @@ const Restaurants = () => {
     axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/age_average_per_gender")
       .then((res) => {
         console.log("res",res)
-        setRestaurants(res.data)
+        setSales(res.data)
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -168,7 +165,7 @@ const Restaurants = () => {
 
   const renderTable = () => {
     if (loading) {
-      console.log("info", restaurants)
+      console.log("info", sales)
       return (
         <div className={centeredDiv}>
           <Loading />
@@ -181,7 +178,7 @@ const Restaurants = () => {
         return (
           <div>
             <div className='col lg-6 mt-5'>
-            <h3>Añadir restaurante:</h3>
+            <h3>Añadir venta:</h3>
             <form onSubmit={(e) => submit(e, id)}>
               <div className={formGrid}>
                 <div className={inputContainer}>
@@ -227,7 +224,7 @@ const Restaurants = () => {
               </div>
             </form>
           </div>
-          <h4>Limitar cantidad de restaurantes a mostrar:</h4>
+          <h4>Limitar cantidad de ventas a mostrar:</h4>
           <div className={buttonContainerOptionsLimit}>
               <input className={inputTextSmall} value={limit} onChange={(e) => setLimit(e.target.value)} 
                 type="number" placeholder='Cantidad:' />
@@ -241,29 +238,35 @@ const Restaurants = () => {
           <div className={scrollableTable}>
             <table className='table'>
               <thead>
-                <th>Nombre</th>
-                <th>País</th>
-                <th>Estrellas</th>
-                <th>Cantidad de mujeres</th>
-                <th>Cantidad de hombres</th>
+                <th>Id de venta</th>
+                <th>Fecha de venta</th>
+                <th>Id de la receta</th>
+                <th>Id del restaurante</th>
+                <th>Id del usuario</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Total</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
               </thead>
               <tbody>
-                {restaurants.map(rest =>
-                      <tr key={rest._ID}>
-                        <td className={leftAligned}>{rest.name}</td>
-                        <td>{rest.country}</td>
-                        <td>{rest.stars}</td>
-                        <td>{rest.employees_quantity.Female}</td>
-                        <td>{rest.employees_quantity.Male}</td>
+                {sales.map(sale =>
+                      <tr key={sale._ID}>
+                        <td className={leftAligned}>{sale._ID}</td>
+                        <td>{sale.date}</td>
+                        <td>{sale.id_recipe}</td>
+                        <td>{sale.id_restaurant}</td>
+                        <td>{sale.id_user}</td>
+                        <td>{sale.quantity}</td>
+                        <td>{sale.price}</td>
+                        <td>{sale.total}</td>
                         <td>
-                          <button onClick={() => editusers(rest._ID)} className={editButton} type="submit" name="action">
+                          <button onClick={() => editusers(sale._ID)} className={editButton} type="submit" name="action">
                             <i className="material-icons ">edit</i>
                           </button>
                         </td>
                         <td>
-                          <button onClick={() => deleteData(rest._ID)} className="btn btn-sm btn-danger waves-light " type="submit" name="action">
+                          <button onClick={() => deleteData(sale._ID)} className="btn btn-sm btn-danger waves-light " type="submit" name="action">
                             <i className="material-icons ">delete</i>
                           </button>
                         </td>
@@ -283,11 +286,11 @@ const Restaurants = () => {
                 <th>Estrellas promedio</th>
               </thead>
               <tbody>
-                {restaurants.map(rest =>
-                      <tr key={rest._id}>
-                        <td className={leftAligned}>{rest._id}</td>
-                        <td>{rest.avg_stars}</td>
-                      </tr>
+                {sales.map(sale =>
+                  <tr key={sale._id}>
+                    <td className={leftAligned}>{sale._id}</td>
+                    <td>{sale.avg_stars}</td>
+                  </tr>
                 )}
               </tbody>
             </table>
@@ -304,7 +307,7 @@ const Restaurants = () => {
       <div className={buttonContainerOptions}>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('verUsuarios')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>local_dining</i> Ver restaurantes
+            <i className="material-icons right" style={{marginRight: "1vh"}}>local_dining</i> Ver ventas
         </button>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('agruparPorEstrellasPromedio')}>
@@ -317,4 +320,4 @@ const Restaurants = () => {
   )
 }
 
-export default Restaurants
+export default Sales

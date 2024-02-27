@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable,
   formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit, inputContainerMenu
  } from './Recipes.module.css'
@@ -28,9 +28,7 @@ const Recipes = () => {
   const [availableRestaurants, setAvailableRestaurants] = useState([])
 
   useEffect(() => {
-    // Calcula los _id y almacénalos en la referencia
     setRestaurants('[' + menuRestaurants.map(item => `'${item._id}'`).join(', ') + ']')
-    console.log("p", menuRestaurants)
   }, [menuRestaurants])
 
 
@@ -55,7 +53,7 @@ const Recipes = () => {
   useEffect(() => {
     setLoading(true)
   
-    axios.get("http://127.0.0.1:5000/recipes")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/recipes")
       .then((res) => {
         setRecipes(res.data)
         setId(0)
@@ -79,7 +77,7 @@ const Recipes = () => {
   
         // Luego de que la primera solicitud haya terminado (ya sea exitosa o con error),
         // realiza la segunda solicitud
-        axios.get("http://127.0.0.1:5000/check_restaurantsId")
+        axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/check_restaurantsId")
           .then((res) => {
             setAvailableRestaurants(res.data)
           })
@@ -92,8 +90,7 @@ const Recipes = () => {
   const submit = (event, id) => {
     event.preventDefault()
     if (id === 0) {
-      console.log("r ",restaurants)
-      axios.post("http://127.0.0.1:5000/recipes", {
+      axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/recipes", {
         title,
         ingredients,
         directions,
@@ -117,7 +114,7 @@ const Recipes = () => {
         setAvailableIngredients([]) 
       })
     } else {
-      axios.put(`http://127.0.0.1:5000/recipes/${id}`, {
+      axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/recipes/${id}`, {
         title,
         ingredients,
         directions,
@@ -144,14 +141,14 @@ const Recipes = () => {
   }
   
   const deleteData = (id) => {
-    axios.delete(`http://127.0.0.1:5000/recipes/${id}`)
+    axios.delete(`https://proyecto-basesdatos2-uvg.koyeb.app/recipes/${id}`)
       .then(() => {
         fetchData()
       })
   }
 
   const editrecipes = (id) => {
-    axios.get(`http://127.0.0.1:5000/editrecipes/${id}`)
+    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editrecipes/${id}`)
       .then((res) => {
         setTitle(res.data.title)
         setIngredients(res.data.ingredients)
@@ -160,13 +157,7 @@ const Recipes = () => {
         setCountry(res.data.country)
         setPrep_time(res.data.prep_time)
         setPrice(res.data.price)
-        console.log("info",res)
-        //setRestaurants(res.data.restaurants)
-        setMenuRestaurants(res.data.restaurants.map(restaurant => ({
-          ...restaurant,
-            id: `'`+restaurant._id +`'`,
-            name: `'`+restaurant.name + `'`
-        })))
+        setMenuRestaurants(res.data.restaurants)
         setAvailableDirections(res.data.directions)
         setAvailableIngredients(res.data.ingredients)      
         setId(res.data._ID)
@@ -179,8 +170,8 @@ const Recipes = () => {
     const parsedLimit = parseInt(limit)
     const isLimitInteger = !isNaN(parsedLimit) && Number.isInteger(parsedLimit)  
     const url = isLimitInteger
-      ? `http://127.0.0.1:5000/recipes?limit=${limit}`
-      : 'http://127.0.0.1:5000/recipes'
+      ? `https://proyecto-basesdatos2-uvg.koyeb.app/recipes?limit=${limit}`
+      : 'https://proyecto-basesdatos2-uvg.koyeb.app/recipes'
   
     axios.get(url)
       .then((res) => {
@@ -197,7 +188,7 @@ const Recipes = () => {
   
   const fetchDataPerCountry = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/recipes_per_country")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/recipes_per_country")
       .then((res) => {
         setRecipes(res.data)
       })
@@ -208,25 +199,11 @@ const Recipes = () => {
         setLoading(false)
       })
   }
-/*
-  const fetchDataIdRestaurants = () => {
-    setLoading(true)
-    axios.get("http://127.0.0.1:5000/check_restaurantsId")
-      .then((res) => {
-        setRestaurants(res.data)  
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      }).finally(() => {
-        setLoading(false)
-      })
-  }
-*/
+
   const fetchDataAvgAgePerGender = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/age_average_per_gender")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/age_average_per_gender")
       .then((res) => {
-        console.log("res",res)
         setRecipes(res.data)
       })
       .catch((error) => {
@@ -337,7 +314,7 @@ const Recipes = () => {
                   </button>
               </div>
           </div>
-          <div className={scrollableTable} style={{maxHeight: "41vh"}}>
+          <div className={scrollableTable} style={{maxHeight: "46vh"}}>
             <table className='table'>
               <thead>
                 <th>Receta</th>
@@ -404,44 +381,6 @@ const Recipes = () => {
           </div>
         </div>
         )
-      case 'agruparPorPais':
-        return (
-          <div className={scrollableTable}>
-            <table className='table'>
-              <thead>
-                <th>País</th>
-                <th>Cantidad de personas</th>
-              </thead>
-              <tbody>
-                {recipes.map(recipe =>
-                      <tr key={recipe._id}>
-                        <td className={leftAligned}>{recipe._id}</td>
-                        <td>{recipe.total}</td>
-                      </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )
-      case 'edadPromedioPorGenero':
-        return (
-          <div className={scrollableTable}>
-          <table className='table'>
-            <thead>
-              <th>Género</th>
-              <th>Edad promedio</th>
-            </thead>
-            <tbody>
-              {recipes.map(recipe =>
-                    <tr key={recipe._id}>
-                      <td className={leftAligned}>{recipe._id}</td>
-                      <td>{recipe.average_age}</td>
-                    </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        )
       default:
         return null
     }
@@ -453,15 +392,7 @@ const Recipes = () => {
       <div className={buttonContainerOptions}>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('verUsuarios')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>local_dining</i> Ver recetas
-        </button>
-        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
-          onClick={() => handleButtonClick('agruparPorPais')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>location_city</i> 10 países con más usuarios
-        </button>
-        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
-          onClick={() => handleButtonClick('edadPromedioPorGenero')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>cake</i> Edad promedio por género
+            <i className="material-icons right" style={{marginRight: "1vh"}}>rotate_left</i> Refrescar
         </button>
       </div>
       {renderTable()}

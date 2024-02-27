@@ -50,7 +50,7 @@
 }
 
 .checkContainer input {
-    width: 4vw;
+    width: 5vw;
     font-size: small;
 }
 
@@ -62,7 +62,7 @@
 
 .inputContainer button {
     padding: 1vh;
-    height: 7vh;
+    height: 3.2vh;
     font-size: xx-small;
 }
 
