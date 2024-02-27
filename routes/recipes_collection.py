@@ -87,8 +87,19 @@ def editrecipes(id):
     db = mongo.db.recipes
     res = db.find_one({"_id": ObjectId(id)})
     restaurant_ids = str(res["restaurants"])
+    restaurantes = []
+    matches = re.findall(r"ObjectId\('(.*?)'", restaurant_ids)
+    object_ids = [m.strip('[') for m in matches]
+    restaurant_ids = [ObjectId(oid) for oid in object_ids]
+    for id in restaurant_ids:
+        restaurant = mongo.db.restaurants.find_one({"_id": ObjectId(id)})
+        restaurant = {
+            "_id": str(restaurant["_id"]),
+            "name": restaurant["name"] 
+        }
+        restaurantes.append((restaurant))
     print(res)
-    return {"_ID": str(ObjectId(res["_id"])), "title":res["title"], "ingredients":res["ingredients"], "directions":res["directions"], "cook_time":res["cook_time (min)"], "country":res["country"], "prep_time":res["prep_time (min)"], "price":res["price ($)"], "restaurants": restaurant_ids}
+    return {"_ID": str(ObjectId(res["_id"])), "title":res["title"], "ingredients":res["ingredients"], "directions":res["directions"], "cook_time":res["cook_time (min)"], "country":res["country"], "prep_time":res["prep_time (min)"], "price":res["price ($)"], "restaurants": restaurantes}
 
 @recipes_bp.route('/check_recipeId', methods=["GET"])
 def check_recipeId():
