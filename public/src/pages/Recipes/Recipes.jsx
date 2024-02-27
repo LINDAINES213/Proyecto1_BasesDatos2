@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable,
   formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit, inputContainerMenu
  } from './Recipes.module.css'
@@ -28,7 +28,6 @@ const Recipes = () => {
   const [availableRestaurants, setAvailableRestaurants] = useState([])
 
   useEffect(() => {
-    // Calcula los _id y almacénalos en la referencia
     setRestaurants('[' + menuRestaurants.map(item => `'${item._id}'`).join(', ') + ']')
     console.log("p", menuRestaurants)
   }, [menuRestaurants])
