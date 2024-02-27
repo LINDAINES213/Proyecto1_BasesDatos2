@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { CRUDoperations, Restaurants, Recipes, Sales } from './pages'
+import { CRUDoperations, Restaurants, Recipes, Sales, Charts } from './pages'
 import { Content, Sidebar } from './components'
 
 // eslint-disable-next-line react/function-component-definition
@@ -21,12 +21,14 @@ function App() {
         {selectedMenuItem === 'Recetas' && <Recipes />}
         {selectedMenuItem === 'Usuarios' && <CRUDoperations />}
         {selectedMenuItem === 'Restaurantes' && <Restaurants />}
+        {selectedMenuItem === 'Mongo Charts' && <Charts />}
         {selectedMenuItem !== 'Inicio' &&
          selectedMenuItem !== 'Acerca de' &&
          selectedMenuItem !== 'Ventas' &&
          selectedMenuItem !== 'Recetas' &&
          selectedMenuItem !== 'Restaurantes' &&
-         selectedMenuItem !== 'Usuarios' && <p>Contenido no definido.</p>}
+         selectedMenuItem !== 'Usuarios' && 
+         selectedMenuItem !== 'Mongo Charts' && <p>Contenido no definido.</p>}
       </Content>
     </div>
   )
