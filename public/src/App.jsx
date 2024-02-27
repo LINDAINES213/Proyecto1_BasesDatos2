@@ -21,14 +21,14 @@ function App() {
         {selectedMenuItem === 'Recetas' && <Recipes />}
         {selectedMenuItem === 'Usuarios' && <CRUDoperations />}
         {selectedMenuItem === 'Restaurantes' && <Restaurants />}
-        {selectedMenuItem === 'Mongo Charts' && <Charts />}
+        {selectedMenuItem === 'Estadísticas' && <Charts />}
         {selectedMenuItem !== 'Inicio' &&
          selectedMenuItem !== 'Acerca de' &&
          selectedMenuItem !== 'Ventas' &&
          selectedMenuItem !== 'Recetas' &&
          selectedMenuItem !== 'Restaurantes' &&
          selectedMenuItem !== 'Usuarios' && 
-         selectedMenuItem !== 'Mongo Charts' && <p>Contenido no definido.</p>}
+         selectedMenuItem !== 'Estadísticas' && <p>Contenido no definido.</p>}
       </Content>
     </div>
   )

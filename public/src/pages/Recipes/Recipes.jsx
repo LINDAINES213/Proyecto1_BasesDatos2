@@ -159,16 +159,12 @@ const Recipes = () => {
         setCountry(res.data.country)
         setPrep_time(res.data.prep_time)
         setPrice(res.data.price)
-        console.log("info",res)
         //setRestaurants(res.data.restaurants)
-        setMenuRestaurants(res.data.restaurants.map(restaurant => ({
-          ...restaurant,
-            id: `'`+restaurant._id +`'`,
-            name: `'`+restaurant.name + `'`
-        })))
+        setMenuRestaurants(res.data.restaurants)
         setAvailableDirections(res.data.directions)
         setAvailableIngredients(res.data.ingredients)      
         setId(res.data._ID)
+        console.log("info",res)
       })
   }
 
@@ -207,20 +203,7 @@ const Recipes = () => {
         setLoading(false)
       })
   }
-/*
-  const fetchDataIdRestaurants = () => {
-    setLoading(true)
-    axios.get("http://127.0.0.1:5000/check_restaurantsId")
-      .then((res) => {
-        setRestaurants(res.data)  
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      }).finally(() => {
-        setLoading(false)
-      })
-  }
-*/
+
   const fetchDataAvgAgePerGender = () => {
     setLoading(true)
     axios.get("http://127.0.0.1:5000/age_average_per_gender")
@@ -336,7 +319,7 @@ const Recipes = () => {
                   </button>
               </div>
           </div>
-          <div className={scrollableTable} style={{maxHeight: "41vh"}}>
+          <div className={scrollableTable} style={{maxHeight: "46vh"}}>
             <table className='table'>
               <thead>
                 <th>Receta</th>
@@ -403,44 +386,6 @@ const Recipes = () => {
           </div>
         </div>
         )
-      case 'agruparPorPais':
-        return (
-          <div className={scrollableTable}>
-            <table className='table'>
-              <thead>
-                <th>País</th>
-                <th>Cantidad de personas</th>
-              </thead>
-              <tbody>
-                {recipes.map(recipe =>
-                      <tr key={recipe._id}>
-                        <td className={leftAligned}>{recipe._id}</td>
-                        <td>{recipe.total}</td>
-                      </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )
-      case 'edadPromedioPorGenero':
-        return (
-          <div className={scrollableTable}>
-          <table className='table'>
-            <thead>
-              <th>Género</th>
-              <th>Edad promedio</th>
-            </thead>
-            <tbody>
-              {recipes.map(recipe =>
-                    <tr key={recipe._id}>
-                      <td className={leftAligned}>{recipe._id}</td>
-                      <td>{recipe.average_age}</td>
-                    </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        )
       default:
         return null
     }
@@ -452,15 +397,7 @@ const Recipes = () => {
       <div className={buttonContainerOptions}>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
           onClick={() => handleButtonClick('verUsuarios')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>local_dining</i> Ver recetas
-        </button>
-        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
-          onClick={() => handleButtonClick('agruparPorPais')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>location_city</i> 10 países con más usuarios
-        </button>
-        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
-          onClick={() => handleButtonClick('edadPromedioPorGenero')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>cake</i> Edad promedio por género
+            <i className="material-icons right" style={{marginRight: "1vh"}}>rotate_left</i> Refrescar
         </button>
       </div>
       {renderTable()}

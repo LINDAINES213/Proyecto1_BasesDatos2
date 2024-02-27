@@ -32,7 +32,7 @@ const Charts = () => {
   return (
     <div className="charts-container">
       <div className="chart" id='chart1'></div>
-      <div className="chart"  id='chart2'></div>
+      <div className="lastChart"  id='chart2'></div>
     </div>
   )
 }

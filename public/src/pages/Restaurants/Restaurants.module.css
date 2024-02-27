@@ -175,7 +175,7 @@ table button i {
 .scrollableTable {
  max-height: 49vh; 
  overflow-y: auto;
- border: 1px solid black; /* Añadir un borde negro de 1 píxel */
+ border: 2px solid black; /* Añadir un borde negro de 1 píxel */
 }
 
 .scrollableTable::-webkit-scrollbar {

@@ -74,10 +74,10 @@ def deleteput(id):
             "title": request.json["title"],
             "ingredients": request.json["ingredients"],
             "directions": request.json["directions"],
-            "cook_time": request.json["cook_time (min)"],
+            "cook_time (min)": request.json["cook_time"],
             "country": request.json["country"],
-            "prep_time": request.json["prep_time (min)"],
-            "price": request.json["price ($)"],
+            "prep_time (min)": request.json["prep_time"],
+            "price ($)": request.json["price"],
             "restaurants": restaurant_ids}})
         return jsonify({"message": "Updated"})
     
