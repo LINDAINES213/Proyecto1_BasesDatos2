@@ -38,7 +38,7 @@ const Restaurants = () => {
 
   useEffect(() => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/restaurants")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/restaurants")
       .then((res) => {
         console.log(res.data)
         setRestaurants(res.data)
@@ -60,7 +60,7 @@ const Restaurants = () => {
     console.log("estrellas",stars)
     event.preventDefault()
     if (id === 0) {
-      axios.post("http://127.0.0.1:5000/restaurants", {
+      axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/restaurants", {
         name,
         country,
         stars,
@@ -77,7 +77,7 @@ const Restaurants = () => {
         setMale('')
       })
     } else {
-      axios.put(`http://127.0.0.1:5000/restaurants/${id}`, {
+      axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/restaurants/${id}`, {
         name,
         country,
         stars,
@@ -97,14 +97,14 @@ const Restaurants = () => {
   }
   
   const deleteData = (id) => {
-    axios.delete(`http://127.0.0.1:5000/restaurants/${id}`)
+    axios.delete(`https://proyecto-basesdatos2-uvg.koyeb.app/restaurants/${id}`)
       .then(() => {
         fetchData()
       })
   }
 
   const editusers = (id) => {
-    axios.get(`http://127.0.0.1:5000/editrestaurant/${id}`)
+    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editrestaurant/${id}`)
       .then((res) => {
         setName(res.data.name),
         setCountry(res.data.country),
@@ -121,8 +121,8 @@ const Restaurants = () => {
     const parsedLimit = parseInt(limit)
     const isLimitInteger = !isNaN(parsedLimit) && Number.isInteger(parsedLimit)  
     const url = isLimitInteger
-      ? `http://127.0.0.1:5000/restaurants?limit=${limit}`
-      : 'http://127.0.0.1:5000/restaurants'
+      ? `https://proyecto-basesdatos2-uvg.koyeb.app/restaurants?limit=${limit}`
+      : 'https://proyecto-basesdatos2-uvg.koyeb.app/restaurants'
   
     axios.get(url)
       .then((res) => {
@@ -139,7 +139,7 @@ const Restaurants = () => {
   
   const fetchDataStarsAvgPerCuisine = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/stars_average_per_cuisine")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/stars_average_per_cuisine")
       .then((res) => {
         setRestaurants(res.data)
       })
@@ -153,7 +153,7 @@ const Restaurants = () => {
 
   const fetchDataAvgAgePerGender = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/age_average_per_gender")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/age_average_per_gender")
       .then((res) => {
         console.log("res",res)
         setRestaurants(res.data)

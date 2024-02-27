@@ -26,7 +26,6 @@ const Sales = () => {
         break
       case 'agruparPorEstrellasPromedio':
         fetchDataStarsAvgPerCuisine()
-        console.log(sales)
         break
       case 'edadPromedioPorGenero':
         fetchDataAvgAgePerGender()
@@ -38,9 +37,8 @@ const Sales = () => {
 
   useEffect(() => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/sales")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/sales")
       .then((res) => {
-        console.log(res.data)
         setSales(res.data)
         setId(0)
         setName('')
@@ -57,10 +55,9 @@ const Sales = () => {
   }, [])
 
   const submit = (event, id) => {
-    console.log("estrellas",stars)
     event.preventDefault()
     if (id === 0) {
-      axios.post("http://127.0.0.1:5000/sales", {
+      axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/sales", {
         name,
         country,
         stars,
@@ -77,7 +74,7 @@ const Sales = () => {
         setMale('')
       })
     } else {
-      axios.put(`http://127.0.0.1:5000/sales/${id}`, {
+      axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/sales/${id}`, {
         name,
         country,
         stars,
@@ -97,14 +94,14 @@ const Sales = () => {
   }
   
   const deleteData = (id) => {
-    axios.delete(`http://127.0.0.1:5000/sales/${id}`)
+    axios.delete(`https://proyecto-basesdatos2-uvg.koyeb.app/sales/${id}`)
       .then(() => {
         fetchData()
       })
   }
 
   const editusers = (id) => {
-    axios.get(`http://127.0.0.1:5000/editsales/${id}`)
+    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editsales/${id}`)
       .then((res) => {
         setName(res.data.name),
         setCountry(res.data.country),
@@ -121,8 +118,8 @@ const Sales = () => {
     const parsedLimit = parseInt(limit)
     const isLimitInteger = !isNaN(parsedLimit) && Number.isInteger(parsedLimit)  
     const url = isLimitInteger
-      ? `http://127.0.0.1:5000/sales?limit=${limit}`
-      : 'http://127.0.0.1:5000/sales'
+      ? `https://proyecto-basesdatos2-uvg.koyeb.app/sales?limit=${limit}`
+      : 'https://proyecto-basesdatos2-uvg.koyeb.app/sales'
   
     axios.get(url)
       .then((res) => {
@@ -139,7 +136,7 @@ const Sales = () => {
   
   const fetchDataStarsAvgPerCuisine = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/stars_average_per_cuisine")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/stars_average_per_cuisine")
       .then((res) => {
         setSales(res.data)
       })
@@ -153,7 +150,7 @@ const Sales = () => {
 
   const fetchDataAvgAgePerGender = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/age_average_per_gender")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/age_average_per_gender")
       .then((res) => {
         console.log("res",res)
         setSales(res.data)

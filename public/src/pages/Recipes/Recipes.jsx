@@ -29,7 +29,6 @@ const Recipes = () => {
 
   useEffect(() => {
     setRestaurants('[' + menuRestaurants.map(item => `'${item._id}'`).join(', ') + ']')
-    console.log("p", menuRestaurants)
   }, [menuRestaurants])
 
 
@@ -54,7 +53,7 @@ const Recipes = () => {
   useEffect(() => {
     setLoading(true)
   
-    axios.get("http://127.0.0.1:5000/recipes")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/recipes")
       .then((res) => {
         setRecipes(res.data)
         setId(0)
@@ -78,7 +77,7 @@ const Recipes = () => {
   
         // Luego de que la primera solicitud haya terminado (ya sea exitosa o con error),
         // realiza la segunda solicitud
-        axios.get("http://127.0.0.1:5000/check_restaurantsId")
+        axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/check_restaurantsId")
           .then((res) => {
             setAvailableRestaurants(res.data)
           })
@@ -91,8 +90,7 @@ const Recipes = () => {
   const submit = (event, id) => {
     event.preventDefault()
     if (id === 0) {
-      console.log("r ",restaurants)
-      axios.post("http://127.0.0.1:5000/recipes", {
+      axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/recipes", {
         title,
         ingredients,
         directions,
@@ -116,7 +114,7 @@ const Recipes = () => {
         setAvailableIngredients([]) 
       })
     } else {
-      axios.put(`http://127.0.0.1:5000/recipes/${id}`, {
+      axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/recipes/${id}`, {
         title,
         ingredients,
         directions,
@@ -143,14 +141,14 @@ const Recipes = () => {
   }
   
   const deleteData = (id) => {
-    axios.delete(`http://127.0.0.1:5000/recipes/${id}`)
+    axios.delete(`https://proyecto-basesdatos2-uvg.koyeb.app/recipes/${id}`)
       .then(() => {
         fetchData()
       })
   }
 
   const editrecipes = (id) => {
-    axios.get(`http://127.0.0.1:5000/editrecipes/${id}`)
+    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editrecipes/${id}`)
       .then((res) => {
         setTitle(res.data.title)
         setIngredients(res.data.ingredients)
@@ -159,12 +157,10 @@ const Recipes = () => {
         setCountry(res.data.country)
         setPrep_time(res.data.prep_time)
         setPrice(res.data.price)
-        //setRestaurants(res.data.restaurants)
         setMenuRestaurants(res.data.restaurants)
         setAvailableDirections(res.data.directions)
         setAvailableIngredients(res.data.ingredients)      
         setId(res.data._ID)
-        console.log("info",res)
       })
   }
 
@@ -174,8 +170,8 @@ const Recipes = () => {
     const parsedLimit = parseInt(limit)
     const isLimitInteger = !isNaN(parsedLimit) && Number.isInteger(parsedLimit)  
     const url = isLimitInteger
-      ? `http://127.0.0.1:5000/recipes?limit=${limit}`
-      : 'http://127.0.0.1:5000/recipes'
+      ? `https://proyecto-basesdatos2-uvg.koyeb.app/recipes?limit=${limit}`
+      : 'https://proyecto-basesdatos2-uvg.koyeb.app/recipes'
   
     axios.get(url)
       .then((res) => {
@@ -192,7 +188,7 @@ const Recipes = () => {
   
   const fetchDataPerCountry = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/recipes_per_country")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/recipes_per_country")
       .then((res) => {
         setRecipes(res.data)
       })
@@ -206,9 +202,8 @@ const Recipes = () => {
 
   const fetchDataAvgAgePerGender = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/age_average_per_gender")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/age_average_per_gender")
       .then((res) => {
-        console.log("res",res)
         setRecipes(res.data)
       })
       .catch((error) => {
