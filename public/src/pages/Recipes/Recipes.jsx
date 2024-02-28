@@ -76,7 +76,6 @@ const Recipes = () => {
         setLoading(false)
   
         // Luego de que la primera solicitud haya terminado (ya sea exitosa o con error),
-        // realiza la segunda solicitud
         axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/check_restaurantsId")
           .then((res) => {
             setAvailableRestaurants(res.data)

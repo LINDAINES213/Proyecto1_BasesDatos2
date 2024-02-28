@@ -1,0 +1,78 @@
+.buttonMenu {
+    background-color: #f0f0f0;
+    border: 3px solid #ff0000;
+    color: #000;
+    width: 21vw;
+    padding: 5px;
+    margin: 0;
+    font-size: xx-small;
+}
+
+.dropdownContent {
+    background-color: #f3f3f3;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow-y: auto;
+    max-height: 40vh;
+    font-size: xx-small;
+    
+}
+
+.dropdownContent::-webkit-scrollbar {
+    width: 0.7vw; /* Ancho de la barra de desplazamiento */
+  }
+  
+  .dropdownContent::-webkit-scrollbar-thumb {
+    background-color: #333; /* Color del pulgar de la barra de desplazamiento */
+  }
+  
+  .dropdownContent::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color de fondo de la pista de la barra de desplazamiento */
+  }
+
+.dropdownContent input {
+    margin: 0; 
+}
+
+.dropdownContent label {
+    margin-left: 0.5vw;
+    width: 15vw;
+    border-bottom-width: 10px;
+    border-bottom-color: #000000;
+    font-size: xx-small;
+}
+
+
+.radioContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Alinea el checkbox a la derecha */
+}
+
+.radioContainer input {
+    width: 2vw;
+    font-size: small;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
+.inputContainer button {
+    padding: 0.8vh;
+    font-size: xx-small;
+}
+
+
+input {
+    border: 3px solid #ff0000;
+    border-radius: 5px; /* Ajusta el valor según sea necesario para obtener el radio deseado */
+    width: 15vw;
+    padding: 5px;
+    color: #000000;
+    font-size: xx-small;
+    background-color: rgb(255, 255, 255);
+    box-sizing:content-box;
+}

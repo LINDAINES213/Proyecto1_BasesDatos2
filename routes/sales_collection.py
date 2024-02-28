@@ -117,7 +117,11 @@ def total_sales_per_recipe():
         {"$unwind": "$recipe"},
         {"$group": {"_id": "$recipe.title", "total_sales ($)": {"$sum": "$total ($)"}}},
         {"$sort": {"total_sales ($)": -1}},
-        {"$limit": 10}
+        {"$project": {
+            "_id": "$_id",
+            "total_sales": "$total_sales ($)"
+        }}
+            
     ]
     resultado = list(db.aggregate(pipeline))
     return jsonify(resultado)
@@ -137,14 +141,13 @@ def total_sales_per_restaurant_month():
         {"$project": {
             "restaurant": "$restaurant.name",
             "month": {"$month": {"$toDate": "$date"}},
-            "total_sales ($)": "$total ($)"
+            "total_sales": "$total ($)"  # Cambiando el nombre de la columna
         }},
         {"$group": {
             "_id": {"restaurant": "$restaurant", "month": "$month"},
-            "total_sales ($)": {"$sum": "$total_sales ($)"},
+            "total_sales": {"$sum": "$total_sales"},  # Cambiando el nombre de la columna
         }},
-        {"$sort": {"total_sales ($)": -1}},
-        {"$limit": 10}
+        {"$sort": {"_id.month": -1, "total_sales": -1, }},
     ]
     resultado = list(db.aggregate(pipeline))
     return jsonify(resultado)

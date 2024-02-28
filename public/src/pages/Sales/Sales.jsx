@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
 import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable,
-  formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit, inputTextSlider
+  formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit, inputContainerMenu
  } from './Sales.module.css'
-import { Loading } from '../../components'
+import { Loading, SelectOption } from '../../components'
 import axios from 'axios'
 
 const Sales = () => {
   const [sales, setSales] = useState([])
   const [id, setId] = useState(0)
   const [id_recipe, setIdRecipe] = useState('')
-  const [id_restaurant, setIdRestaurant] = useState('')
+  const [id_restaurant, setIdRestaurant] = useState()
+  const [restaurant, setRestaurant] = useState()
+  const [newRestaurant, setNewRestaurant] = useState('')
+  const [availableRestaurants, setAvailableRestaurants] = useState([])
   const [id_user, setIdUser] = useState('')
   const [quantity, setQuantity] = useState('')
   const [price, setPrice] = useState('')
@@ -18,6 +21,13 @@ const Sales = () => {
   const [selectedOption, setSelectedOption] = useState('verUsuarios')
   const [loading, setLoading] = useState(false)
 
+  useEffect(() => {
+    if (restaurant && restaurant._id !== undefined) {
+      setIdRestaurant(restaurant._id)
+    }
+    console.log("id_restaurant",id_restaurant)
+  }, [restaurant])
+
   const handleButtonClick = (option) => {
     setSelectedOption(option)
     switch (option) {
@@ -25,11 +35,11 @@ const Sales = () => {
         fetchData()
         setLimit()
         break
-      case 'agruparPorEstrellasPromedio':
-        fetchDataStarsAvgPerCuisine()
+      case 'totalVentasPorReceta':
+        fetchTotalSalePerRecipe()
         break
-      case 'edadPromedioPorGenero':
-        fetchDataAvgAgePerGender()
+      case 'totalVentasPorRestaurantePorMes':
+        fetchTotalSalePerRestaurantPerMonth()
         break
       default:
         console.log("Error fetching data")
@@ -54,6 +64,15 @@ const Sales = () => {
         console.error('Error fetching data:', error)
       }).finally(() => {
         setLoading(false)
+        axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/check_restaurantsId")
+        .then((res) => {
+          console.log("restaurantes",res)
+          setAvailableRestaurants(res.data)
+
+        })
+        .catch((error) => {
+          console.error('Error fetching restaurants data:', error)
+        })
       })
   }, [])
 
@@ -71,6 +90,7 @@ const Sales = () => {
         fetchData()
         setIdRecipe('')
         setIdRestaurant('')
+        setRestaurant('')
         setIdUser('')
         setQuantity('')
         setPrice('')
@@ -138,9 +158,9 @@ const Sales = () => {
   }
   
   
-  const fetchDataStarsAvgPerCuisine = () => {
+  const fetchTotalSalePerRecipe = () => {
     setLoading(true)
-    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/stars_average_per_cuisine")
+    axios.get("http://127.0.0.1:5000/total_sales_per_recipe")
       .then((res) => {
         setSales(res.data)
       })
@@ -152,11 +172,11 @@ const Sales = () => {
       })
   }
 
-  const fetchDataAvgAgePerGender = () => {
+  const fetchTotalSalePerRestaurantPerMonth = () => {
     setLoading(true)
-    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/age_average_per_gender")
+    axios.get("http://127.0.0.1:5000/total_sales_per_restaurant_month")
       .then((res) => {
-        console.log("res",res)
+        console.log("Per Month",res)
         setSales(res.data)
       })
       .catch((error) => {
@@ -187,23 +207,32 @@ const Sales = () => {
               <div className={formGrid}>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">local_dining</i>
-                    <input className={inputText} value={name} onChange={(e) => setName(e.target.value)} type="text" 
+                    <input className={inputText} value={price} onChange={(e) => setIdRecipe(e.target.value)} type="text" 
                       placeholder='Receta' />
                 </div>
-                <div className={inputContainer}>
-                    <i className="material-icons prefix">language</i>
-                    <input className={inputText} value={country} onChange={(e) => setCountry(e.target.value)} type="text" placeholder='Restaurante' />
+                <div className={inputContainerMenu}>
+                  <i className="material-icons prefix">filter_9_plus</i>
+                  <SelectOption
+                      menu={"Restaurante a seleccionar"}
+                      selectedOption={restaurant}
+                      setSelectedOption={setRestaurant}
+                      newOption={newRestaurant}
+                      setNewOption={setNewRestaurant}
+                      availableOptions={availableRestaurants}
+                      setAvailableOptions={setAvailableRestaurants}
+                      allowAdd={false}
+                  />
                 </div>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">wc</i>
-                    <input className={inputText} value={Female} onChange={(e) => setFemale(parseInt(e.target.value,10))} 
+                    <input className={inputText} value={price} onChange={(e) => setIdUser(parseInt(e.target.value,10))} 
                       type="number" placeholder='Usuario' />
                 </div>
               </div>
               <div className={formGrid}>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">wc</i>
-                    <input className={inputText} value={Female} onChange={(e) => setFemale(parseInt(e.target.value,10))} 
+                    <input className={inputText} value={price} onChange={(e) => setQuantity(parseInt(e.target.value,10))} 
                       type="number" placeholder='Cantidad' />
                 </div>
                 <div className={inputContainer}>
@@ -212,7 +241,7 @@ const Sales = () => {
                       type="number" placeholder='Precio ($)' />
                 </div>
                 <div className={inputContainer}>
-                    <i className="material-icons prefix">local_offer</i>
+                    <i className="material-icons prefix">monetization_on</i>
                     <input className={inputText} value={total} onChange={(e) => setTotal(parseInt(e.target.value,10))} type="number"
                         placeholder='Total ($)' />
                     <div className={buttonContainer}>
@@ -243,8 +272,8 @@ const Sales = () => {
                 <th>Id de la receta</th>
                 <th>Id del restaurante</th>
                 <th>Id del usuario</th>
-                <th>Cantidad</th>
                 <th>Precio ($)</th>
+                <th>Cantidad</th>
                 <th>Total ($)</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
@@ -258,8 +287,8 @@ const Sales = () => {
                         { sale.id_restaurant[0] && 
                           <td key={sale.id_restaurant[0].id}>{sale.id_restaurant[0].name + ` - ` + sale.id_restaurant[0].id}</td> }
                         { sale.id_user[0] && <td key={sale.id_user[0].id}>{sale.id_user[0].name + ` - ` + sale.id_user[0].id}</td> }
+                        <td>{sale.price}</td>
                         <td>{sale.quantity}</td>
-                        <td>{sale.price }</td>
                         <td>{sale.total}</td>
                         <td>
                           <button onClick={() => editusers(sale._ID)} className={editButton} type="submit" name="action">
@@ -278,25 +307,46 @@ const Sales = () => {
           </div>
         </div>
         )
-      case 'agruparPorEstrellasPromedio':
+      case 'totalVentasPorReceta':
         return (
           <div className={scrollableTable}>
             <table className='table'>
               <thead>
-                <th>País</th>
-                <th>Estrellas promedio</th>
+                <th>Receta</th>
+                <th>Total de ventas</th>
               </thead>
               <tbody>
                 {sales.map(sale =>
                   <tr key={sale._id}>
                     <td className={leftAligned}>{sale._id}</td>
-                    <td>{sale.avg_stars}</td>
+                    <td>{sale.total_sales}</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
         )
+      case 'totalVentasPorRestaurantePorMes': 
+        return (
+          <div className={scrollableTable}>
+            <table className='table'>
+              <thead>
+                <th>Restaurante</th>
+                <th>Mes</th>
+                <th>Total de ventas</th>
+              </thead>
+              <tbody>
+                {sales.map(sale =>
+                  <tr key={sale._id}>
+                    { sale._id && <td className={leftAligned}>{sale._id.restaurant}</td> }
+                    { sale._id && <td className={leftAligned}>{sale._id.month}</td> }
+                    <td>{sale.total_sales}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )      
       default:
         return null
     }
@@ -311,8 +361,12 @@ const Sales = () => {
             <i className="material-icons right" style={{marginRight: "1vh"}}>local_dining</i> Ver ventas
         </button>
         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
-          onClick={() => handleButtonClick('agruparPorEstrellasPromedio')}>
-            <i className="material-icons right" style={{marginRight: "1vh"}}>grade</i> Promedio de estrellas por país
+          onClick={() => handleButtonClick('totalVentasPorReceta')}>
+            <i className="material-icons right" style={{marginRight: "1vh"}}>monetization_on</i> Total de ventas por receta
+        </button>
+        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
+          onClick={() => handleButtonClick('totalVentasPorRestaurantePorMes')}>
+            <i className="material-icons right" style={{marginRight: "1vh"}}>pie_chart</i> Total de ventas por restaurante por mes
         </button>
       </div>
       {renderTable()}

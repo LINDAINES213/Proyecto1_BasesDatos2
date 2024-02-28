@@ -162,6 +162,10 @@ table button {
   background-color:  rgb(8, 33, 227);
 }
 
+.inputContainerMenu {
+  display: flex;
+  align-items: center;
+}
 
 /* Estilos específicos para los íconos dentro de los botones */
 table button i {
