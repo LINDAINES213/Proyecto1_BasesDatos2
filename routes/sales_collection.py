@@ -54,7 +54,7 @@ def getpost():
         return jsonify(o)
     elif request.method == "POST":
         date_str = request.json.get("date")
-        id = db.insert_one({"date": datetime.strptime(date_str, "%Y-%m-%d"), "id_recipe": request.json[str("id_recipe")], "id_restaurant": request.json[str("id_restaurant")], "id_user": request.json[str("id_user")], "quantity": request.json["quantity"], "price ($)": request.json["price ($)"], "total ($)": request.json["total ($)"]})
+        id = db.insert_one({"date": datetime.strptime(date_str, "%Y-%m-%d"), "id_recipe": request.json[str("id_recipe")], "id_restaurant": request.json[str("id_restaurant")], "id_user": request.json[str("id_user")], "quantity": request.json["quantity"], "price": request.json["price ($)"], "total": request.json["total ($)"]})
         inserted_id = id.inserted_id
         return jsonify({"_id": str(inserted_id)})
         
