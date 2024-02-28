@@ -107,5 +107,7 @@ def check_recipeId():
     db = mongo.db.recipes
     if request.method == "GET":
         query = db.find({}, { "_id": 1, "title": 1}).sort("title", 1)
-        result = [{**doc, '_id': str(doc['_id'])} for doc in query]
+        result = [{**doc, '_id': str(doc['_id']), 'name': doc.pop('title')} for doc in query]
+        for doc in result:
+            del doc['title']
     return jsonify(result)
