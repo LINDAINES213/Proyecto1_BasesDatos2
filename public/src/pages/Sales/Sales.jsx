@@ -41,6 +41,9 @@ const Sales = () => {
       case 'totalVentasPorRestaurantePorMes':
         fetchTotalSalePerRestaurantPerMonth()
         break
+      case 'totalVentasPorPais':
+        fetchTotalSalePerCountry()
+        break
       default:
         console.log("Error fetching data")
     }
@@ -177,6 +180,21 @@ const Sales = () => {
     axios.get("http://127.0.0.1:5000/total_sales_per_restaurant_month")
       .then((res) => {
         console.log("Per Month",res)
+        setSales(res.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  const fetchTotalSalePerCountry = () => {
+    setLoading(true)
+    axios.get("http://127.0.0.1:5000/sold_recipes_per_country")
+      .then((res) => {
+        console.log("Per Country",res)
         setSales(res.data)
       })
       .catch((error) => {
@@ -347,6 +365,27 @@ const Sales = () => {
             </table>
           </div>
         )      
+      case 'totalVentasPorPais': 
+        return (
+          <div className={scrollableTable}>
+            <table className='table'>
+              <thead>
+                <th>País</th>
+                <th>Receta</th>
+                <th>Total de ventas</th>
+              </thead>
+              <tbody>
+                {sales.map(sale =>
+                  <tr key={sale._id}>
+                    { sale._id && <td className={leftAligned}>{sale._id.country}</td> }
+                    { sale._id && <td className={leftAligned}>{sale._id.recipe}</td> }
+                    <td>{sale.total_ventas}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )      
       default:
         return null
     }
@@ -368,6 +407,9 @@ const Sales = () => {
           onClick={() => handleButtonClick('totalVentasPorRestaurantePorMes')}>
             <i className="material-icons right" style={{marginRight: "1vh"}}>pie_chart</i> Total de ventas por restaurante por mes
         </button>
+        <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action"
+          onClick={() => handleButtonClick('totalVentasPorPais')}>
+            <i className="material-icons right" style={{marginRight: "1vh"}}>language</i> Los 10 países con más ingresos por ventas</button>
       </div>
       {renderTable()}
     </div>

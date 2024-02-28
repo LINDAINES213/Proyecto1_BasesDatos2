@@ -162,12 +162,13 @@ def sold_recipes_per_country():
             "localField": "id_recipe", 
             "foreignField": "_id", 
             "as": "recipe" 
-            }
-        }, 
-            
-        {"$unwind": "$recipe"}, 
-        {"$group": { "_id": { "country": "$recipe.country", "recipe": "$recipe.title" }, "total_ventas ($)": {"$sum": "$total ($)"} }}, 
-        {"$sort": {"total_ventas ($)": -1}}, 
+        }},
+        {"$unwind": "$recipe"},
+        {"$group": {
+            "_id": {"country": "$recipe.country", "recipe": "$recipe.title"},
+            "total_ventas": {"$sum": "$total ($)"}  # Cambiando el nombre de la columna
+        }},
+        {"$sort": {"total_ventas": -1}},
         {"$limit": 10}
     ]
     resultado = list(db.aggregate(pipeline))
