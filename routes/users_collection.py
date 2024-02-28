@@ -69,3 +69,12 @@ def age_average_per_gender():
     ]
     resultado = list(db.aggregate(pipeline))
     return jsonify(resultado)
+
+@users_bp.route('/check_usersId', methods=["GET"])
+def check_usersId():
+    from app import mongo
+    db = mongo.db.users
+    if request.method == "GET":
+        query = db.find({}, { "_id": 1, "name": 1}).sort("name", 1)
+        result = [{**doc, '_id': str(doc['_id'])} for doc in query]
+    return jsonify(result)
