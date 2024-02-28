@@ -111,3 +111,23 @@ def check_recipeId():
         for doc in result:
             del doc['title']
     return jsonify(result)
+
+@recipes_bp.route('/restaurantsIds', methods=["GET"])
+def recipes_per_country():
+    from app import mongo
+    db = mongo.db.recipes
+    o = []
+    pipeline = [
+            {"$lookup": { 
+                "from": "restaurants", 
+                "localField": "restaurants", 
+                "foreignField": "_id", 
+                "as": "restaurant_name" 
+                }
+            },
+    ]
+    result = db.aggregate(pipeline)
+    for i in result:
+        restaurantes = [{"_id": str(restaurant["_id"]), "name": restaurant["name"]} for restaurant in i["restaurant_name"]]
+        o.append({"_ID": str(ObjectId(i["_id"])), "restaurants": restaurantes})
+    return jsonify(o)
