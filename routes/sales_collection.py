@@ -43,14 +43,14 @@ def getpost():
                 receta = [{"id": str(recipe["_id"]), "title": recipe["title"]} for recipe in i["recipe_name"]]
                 usuario = [{"id": str(user["_id"]), "name": user["name"]} for user in i["user_name"]]
 
-                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": receta, "id_restaurant": restaurante, "id_user": usuario, "quantity":i["quantity"], "price":i["price ($)"], "total":i["total ($)"]})
+                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": receta, "id_restaurant": restaurante, "id_user": usuario, "quantity":i["quantity"], "price ($)":i["price ($)"], "total ($)":i["total ($)"]})
         else:
             result = db.aggregate(pipeline)
             for i in result:
                 restaurante = [{"id": str(restaurant["_id"]), "name": restaurant["name"]} for restaurant in i["restaurant_name"]]
                 receta = [{"id": str(recipe["_id"]), "title": recipe["title"]} for recipe in i["recipe_name"]]
                 usuario = [{"id": str(user["_id"]), "name": user["name"]} for user in i["user_name"]]
-                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": receta, "id_restaurant": restaurante, "id_user": usuario, "quantity":i["quantity"], "price":i["price ($)"], "total":i["total ($)"]})
+                o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": receta, "id_restaurant": restaurante, "id_user": usuario, "quantity":i["quantity"], "price ($)":i["price ($)"], "total ($)":i["total ($)"]})
         return jsonify(o)
     elif request.method == "POST":
         date_str = request.json.get("date")
@@ -95,12 +95,12 @@ def editsales(id):
 
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "date": date_str,
-    "recipe": recipe,
-    "restaurant": restaurant,
-    "user": user,
+    "id_recipe": recipe,
+    "id_restaurant": restaurant,
+    "id_user": user,
     "quantity": res["quantity"],
-    "price ($)": res["price ($)"],
-    "total ($)": res["total ($)"]}
+    "price": res["price ($)"],
+    "total": res["total ($)"]}
 
 @sales_bp.route('/total_sales_per_recipe', methods=["GET"])
 def total_sales_per_recipe():
