@@ -8,11 +8,12 @@ import axios from 'axios'
 const Sales = () => {
   const [sales, setSales] = useState([])
   const [id, setId] = useState(0)
-  const [name, setName] = useState('')
-  const [country, setCountry] = useState('')
-  const [stars, setStars] = useState(1)
-  const [Female, setFemale] = useState('')
-  const [Male, setMale] = useState('')
+  const [id_recipe, setIdRecipe] = useState('')
+  const [id_restaurant, setIdRestaurant] = useState('')
+  const [id_user, setIdUser] = useState('')
+  const [quantity, setQuantity] = useState('')
+  const [price, setPrice] = useState('')
+  const [total, setTotal] = useState('')
   const [limit, setLimit] = useState()
   const [selectedOption, setSelectedOption] = useState('verUsuarios')
   const [loading, setLoading] = useState(false)
@@ -40,12 +41,14 @@ const Sales = () => {
     axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/sales")
       .then((res) => {
         setSales(res.data)
+        console.log("res", res.data)
         setId(0)
-        setName('')
-        setCountry('')
-        setStars(1)
-        setFemale('')
-        setMale('')
+        setIdRecipe('')
+        setIdRestaurant('')
+        setIdUser('')
+        setQuantity('')
+        setPrice('')
+        setTotal('')
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -58,37 +61,37 @@ const Sales = () => {
     event.preventDefault()
     if (id === 0) {
       axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/sales", {
-        name,
-        country,
-        stars,
-        employees_quantity: {
-          Female,
-          Male
-        }
+      id_recipe,
+      id_restaurant,
+      id_user,
+      quantity,
+      price,
+      total,  
       }).then(() => {
         fetchData()
-        setName('')
-        setCountry('')
-        setStars(1)
-        setFemale('')
-        setMale('')
+        setIdRecipe('')
+        setIdRestaurant('')
+        setIdUser('')
+        setQuantity('')
+        setPrice('')
+        setTotal('')
       })
     } else {
       axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/sales/${id}`, {
-        name,
-        country,
-        stars,
-        employees_quantity: {
-          Female,
-          Male
-        }
+        id_recipe,
+        id_restaurant,
+        id_user,
+        quantity,
+        price,
+        total, 
       }).then(() => {
         fetchData()
-        setName('')
-        setCountry('')
-        setStars(1)
-        setFemale('')
-        setMale('')
+        setIdRecipe('')
+        setIdRestaurant('')
+        setIdUser('')
+        setQuantity('')
+        setPrice('')
+        setTotal('')
       })
     }
   }
@@ -103,11 +106,12 @@ const Sales = () => {
   const editusers = (id) => {
     axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editsales/${id}`)
       .then((res) => {
-        setName(res.data.name),
-        setCountry(res.data.country),
-        setStars(res.data.stars),
-        setFemale(res.data.employees_quantity.Female),
-        setMale(res.data.employees_quantity.Male)
+        setIdRecipe(),
+        setIdRestaurant(),
+        setIdUser(),
+        setQuantity(),
+        setPrice()
+        setTotal()
         setId(res.data._ID)
       })
   }
@@ -184,37 +188,33 @@ const Sales = () => {
                 <div className={inputContainer}>
                     <i className="material-icons prefix">local_dining</i>
                     <input className={inputText} value={name} onChange={(e) => setName(e.target.value)} type="text" 
-                      placeholder='Nombre del restaurante' />
+                      placeholder='Receta' />
                 </div>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">language</i>
-                    <input className={inputText} value={country} onChange={(e) => setCountry(e.target.value)} type="text" placeholder='País' />
+                    <input className={inputText} value={country} onChange={(e) => setCountry(e.target.value)} type="text" placeholder='Restaurante' />
                 </div>
                 <div className={inputContainer}>
-                    <i className="material-icons prefix">grade</i>
-                    <input 
-                      className={inputTextSlider}
-                      type="range"
-                      id="ratingSlider"
-                      min="1"
-                      max="5"
-                      step="1"
-                      value={stars}
-                      onChange={(e) => setStars(parseInt(e.target.value, 10))}
-                    />
-                    <label htmlFor="ratingSlider">{stars}</label>
+                    <i className="material-icons prefix">wc</i>
+                    <input className={inputText} value={Female} onChange={(e) => setFemale(parseInt(e.target.value,10))} 
+                      type="number" placeholder='Usuario' />
                 </div>
               </div>
               <div className={formGrid}>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">wc</i>
                     <input className={inputText} value={Female} onChange={(e) => setFemale(parseInt(e.target.value,10))} 
-                      type="number" placeholder='Cantidad mujeres' />
+                      type="number" placeholder='Cantidad' />
                 </div>
                 <div className={inputContainer}>
-                    <i className="material-icons prefix">wc</i>
-                    <input className={inputText} value={Male} onChange={(e) => setMale(e.target.value)} type="number"
-                        placeholder='Cantidad hombres' />
+                    <i className="material-icons prefix">local_offer</i>
+                    <input className={inputText} value={price} onChange={(e) => setPrice(parseInt(e.target.value,10))} 
+                      type="number" placeholder='Precio ($)' />
+                </div>
+                <div className={inputContainer}>
+                    <i className="material-icons prefix">local_offer</i>
+                    <input className={inputText} value={total} onChange={(e) => setTotal(parseInt(e.target.value,10))} type="number"
+                        placeholder='Total ($)' />
                     <div className={buttonContainer}>
                         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Enviar 
                             <i className="material-icons right">send</i>
@@ -244,8 +244,8 @@ const Sales = () => {
                 <th>Id del restaurante</th>
                 <th>Id del usuario</th>
                 <th>Cantidad</th>
-                <th>Precio</th>
-                <th>Total</th>
+                <th>Precio ($)</th>
+                <th>Total ($)</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
               </thead>
@@ -254,11 +254,12 @@ const Sales = () => {
                       <tr key={sale._ID}>
                         <td className={leftAligned}>{sale._ID}</td>
                         <td>{sale.date}</td>
-                        <td>{sale.id_recipe}</td>
-                        <td>{sale.id_restaurant}</td>
-                        <td>{sale.id_user}</td>
+                        { sale.id_recipe[0] && <td key={sale.id_recipe[0].id}>{sale.id_recipe[0].title + ` - ` +  sale.id_recipe[0].id}</td> }
+                        { sale.id_restaurant[0] && 
+                          <td key={sale.id_restaurant[0].id}>{sale.id_restaurant[0].name + ` - ` + sale.id_restaurant[0].id}</td> }
+                        { sale.id_user[0] && <td key={sale.id_user[0].id}>{sale.id_user[0].name + ` - ` + sale.id_user[0].id}</td> }
                         <td>{sale.quantity}</td>
-                        <td>{sale.price}</td>
+                        <td>{sale.price }</td>
                         <td>{sale.total}</td>
                         <td>
                           <button onClick={() => editusers(sale._ID)} className={editButton} type="submit" name="action">
