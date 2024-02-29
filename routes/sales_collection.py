@@ -8,10 +8,7 @@ sales_bp = Blueprint('sales', __name__)
 def getpost():
     from app import mongo
     db = mongo.db.sales
-    if request.method == "GET":
-        limit = int(request.args.get('limit', 0))
-        o = []
-        pipeline = [
+    pipeline = [
             {"$lookup": { 
                 "from": "restaurants", 
                 "localField": "id_restaurant", 
@@ -34,7 +31,10 @@ def getpost():
                 }
             },
             {"$sort":{ "date": -1}},
-        ]
+    ]
+    if request.method == "GET":
+        limit = int(request.args.get('limit', 0))
+        o = []
         if limit > 0: 
             pipeline.append({"$limit": limit})
             result = db.aggregate(pipeline)
@@ -54,7 +54,10 @@ def getpost():
         return jsonify(o)
     elif request.method == "POST":
         date_str = request.json.get("date")
-        id = db.insert_one({"date": datetime.strptime(date_str, "%Y-%m-%d"), "id_recipe": request.json[str("id_recipe")], "id_restaurant": request.json[str("id_restaurant")], "id_user": request.json[str("id_user")], "quantity": request.json["quantity"], "price ($)": request.json["price"], "total ($)": request.json["total"]})
+        id_recipe = request.json[str("id_recipe")]
+        id_restaurant = request.json[str("id_restaurant")]
+        id_user = request.json[str("id_user")]
+        id = db.insert_one({"date": datetime.strptime(date_str, "%Y-%m-%d"), "id_recipe": ObjectId(id_recipe), "id_restaurant": ObjectId(id_restaurant), "id_user": ObjectId(id_user), "quantity": request.json["quantity"], "price ($)": request.json["price"], "total ($)": request.json["total"]})
         inserted_id = id.inserted_id
         return jsonify({"_id": str(inserted_id)})
         
@@ -85,13 +88,13 @@ def editsales(id):
     res = db.find_one({"_id": ObjectId(id)})
     date_str = str(res["date"])
 
-    recipe = mongo.db.recipes.find_one({"_id": res["id_recipe"]}) 
-    restaurant = mongo.db.restaurants.find_one({"_id": res["id_restaurant"]})
-    user = mongo.db.users.find_one({"_id": res["id_user"]})
+    recipe = mongo.db.recipes.find_one({"_id": ObjectId(res["id_recipe"])}) 
+    restaurant = mongo.db.restaurants.find_one({"_id": ObjectId(res["id_restaurant"])})
+    user = mongo.db.users.find_one({"_id": ObjectId(res["id_user"])})
 
-    recipe = [{"id": str(res["id_recipe"]),"title": recipe["title"]}]
-    restaurant = [{"id": str(res["id_restaurant"]), "name": restaurant["name"]}]
-    user = [{"id": str(res["id_user"]), "name": user["name"]}]
+    recipes = [{"id": str(recipe),"title": recipe["title"]}]
+    restaurants = [{"id": str(restaurant), "name": restaurant["name"]}]
+    users = [{"id": str(user), "name": user["name"]}]
 
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "date": date_str,
