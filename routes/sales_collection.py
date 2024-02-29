@@ -71,14 +71,17 @@ def deleteput(id):
         return jsonify({"message": "Deleted"})
     elif request.method == "PUT":
         date_str = request.json.get("date")
+        id_recipe = request.json[str("id_recipe")]
+        id_restaurant = request.json[str("id_restaurant")]
+        id_user = request.json[str("id_user")]
         db.update_one({"_id": ObjectId(id)}, {"$set":{
             "date": datetime.strptime(date_str, "%Y-%m-%d"),
-            "id_recipe": request.json[str("id_recipe")], 
-            "id_restaurant": request.json[str("id_restaurant")], 
-            "id_user": request.json[str("id_user")], 
+            "id_recipe": ObjectId(id_recipe), 
+            "id_restaurant": ObjectId(id_restaurant), 
+            "id_user": ObjectId(id_user), 
             "quantity": request.json["quantity"], 
-            "price ($)": request.json["price ($)"], 
-            "total ($)": request.json["total ($)"]}})
+            "price ($)": request.json["price"], 
+            "total ($)": request.json["total"]}})
         return jsonify({"message": "Updated"})
     
 @sales_bp.route('/editsales/<id>', methods=["GET"])
@@ -92,9 +95,9 @@ def editsales(id):
     restaurant = mongo.db.restaurants.find_one({"_id": ObjectId(res["id_restaurant"])})
     user = mongo.db.users.find_one({"_id": ObjectId(res["id_user"])})
 
-    recipes = [{"id": str(recipe),"title": recipe["title"]}]
-    restaurants = [{"id": str(restaurant), "name": restaurant["name"]}]
-    users = [{"id": str(user), "name": user["name"]}]
+    recipe = [{"id": str(ObjectId(recipe["_id"])),"title": recipe["title"]}]
+    restaurant = [{"id": str(ObjectId(restaurant["_id"])), "name": restaurant["name"]}]
+    user = [{"id": str(ObjectId(user["_id"])), "name": user["name"]}]
 
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "date": date_str,
