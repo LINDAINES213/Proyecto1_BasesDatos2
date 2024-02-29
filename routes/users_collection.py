@@ -42,9 +42,23 @@ def get_profile_image(id):
         for chunk in mongo.db.fs.files.find({'_id': ObjectId(id)}):
             file_data += chunk.get('data', b'')
 
-        response = send_file(io.BytesIO(file_data), mimetype = 'image/png')
+        image_data = {
+            'filename': gridfs_file['filename'],
+            'chunkSize': gridfs_file.get('chunkSize', ''),
+            'upload_date': gridfs_file.get('uploadDate', ''),
+            'length': gridfs_file.get('length', ''),
+            # Añade más campos según sea necesario
+        }
+
+        # Construye la URL de la imagen
+        image_url = url_for('users.get_profile_image', id=id)
+
+        # Devuelve los datos de la imagen junto con la URL
+        return jsonify({'image_data': image_data, 'image_url': image_url}), 200
+
+        '''response = send_file(io.BytesIO(file_data), mimetype = 'image/png')
         response.headers['Content-Disposition'] = 'inline; filename=' + gridfs_file['filename']
-        return response
+        return jsonify({'image_data': image_data, 'image': response}), 200'''
     except Exception as e:
         return str(e), 500
     
