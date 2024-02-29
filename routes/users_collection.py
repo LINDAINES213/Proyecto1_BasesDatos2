@@ -28,13 +28,13 @@ def getpost():
 def get_profile_image(id):
     from app import mongo
     try:
-        fs = GridFS(mongo.db)
+        '''fs = GridFS(mongo.db)
         image = fs.get(ObjectId(id))
         if image is not None:
             return send_file(image, mimetype = 'image/png')
         else:
-            return 'Image not found', 404
-        '''gridfs_file = mongo.db.fs.files.find_one({'_id': ObjectId(id)})
+            return 'Image not found', 404'''
+        gridfs_file = mongo.db.fs.files.find_one({'_id': ObjectId(id)})
         if gridfs_file is None:
             return 'Image not found', 404
         
@@ -44,7 +44,7 @@ def get_profile_image(id):
 
         response = send_file(io.BytesIO(file_data), mimetype = 'image/png')
         response.headers['Content-Disposition'] = 'inline; filename=' + gridfs_file['filename']
-        return response'''
+        return response
     except Exception as e:
         return str(e), 500
     
