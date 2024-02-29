@@ -1,5 +1,7 @@
-from flask import Blueprint, jsonify, request
+import io
+from flask import Blueprint, jsonify, request, send_file, url_for
 from bson import ObjectId
+from gridfs import GridFS
 
 users_bp = Blueprint('users', __name__)
 
@@ -21,6 +23,31 @@ def getpost():
         id = db.insert_one({"name": request.json["name"], "age": request.json["age"], "gender": request.json["gender"], "country": request.json["country"], "contact": {"email": request.json["contact"]["email"], "phone": request.json["contact"]["phone"]}})
         inserted_id = id.inserted_id
         return jsonify({"_id": str(inserted_id)})
+    
+@users_bp.route('/usersImage/<id>', methods=['GET'])
+def get_profile_image(id):
+    from app import mongo
+    try:
+        fs = GridFS(mongo.db)
+        image = fs.get(ObjectId(id))
+        if image is not None:
+            return send_file(image, mimetype = 'image/png')
+        else:
+            return 'Image not found', 404
+        '''gridfs_file = mongo.db.fs.files.find_one({'_id': ObjectId(id)})
+        if gridfs_file is None:
+            return 'Image not found', 404
+        
+        file_data = b''
+        for chunk in mongo.db.fs.files.find({'_id': ObjectId(id)}):
+            file_data += chunk.get('data', b'')
+
+        response = send_file(io.BytesIO(file_data), mimetype = 'image/png')
+        response.headers['Content-Disposition'] = 'inline; filename=' + gridfs_file['filename']
+        return response'''
+    except Exception as e:
+        return str(e), 500
+    
         
 @users_bp.route('/users/<id>', methods=["DELETE", "PUT"])
 def deleteput(id):
@@ -38,6 +65,15 @@ def deleteput(id):
             "contact": {"email": request.json["contact"]["email"], "phone": request.json["contact"]["phone"]}
         }})
         return jsonify({"message": "Updated"})
+    
+@users_bp.route("/usersImage", methods=["GET"])
+def usersImage():
+    from app import mongo
+    db = mongo.db.users
+    o = []
+    for i in db.find().sort("name", 1):
+        o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender": i["gender"], "country": i["country"], "contact": i["contact"], "profile_image": str(ObjectId(i["profile_image"]))})
+    return jsonify(o)
     
 @users_bp.route('/editusers/<id>', methods=["GET"])
 def editusers(id):
