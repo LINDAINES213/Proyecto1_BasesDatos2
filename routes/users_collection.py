@@ -25,18 +25,55 @@ def getpost():
         inserted_id = id.inserted_id
         return jsonify({"_id": str(inserted_id)})
     
-@users_bp.route('/usersImage/<id>', methods=['GET'])
+@users_bp.route('/usersImage/<id>', methods=['GET', 'PUT', 'DELETE'])
 def get_profile_image(id):
     from app import mongo
-    try:
-        fs = GridFS(mongo.db, collection='users')
-        image = fs.get(ObjectId(id))
-        if image is not None:
-            return send_file(image, mimetype = 'image/png')
-        else:
-            return 'Image not found', 404
-    except Exception as e:
-        return str(e), 500
+    db = mongo.db.users
+    if request.method == 'GET':
+        try:
+            fs = GridFS(mongo.db, collection='users')
+            image = fs.get(ObjectId(id))
+            if image is not None:
+                return send_file(image, mimetype = 'image/png')
+            else:
+                return 'Image not found', 404
+        except Exception as e:
+            return str(e), 500
+    elif request.method == "PUT":
+        try:
+            fs = GridFS(mongo.db, collection='users')
+            
+            if 'image' not in request.file:
+                return 'No image provided', 400
+            
+            new_image = request.file['image']
+
+            if new_image.filename == '':
+                return 'No selected file', 400
+            
+            fs.delete(ObjectId(id))
+            fs.put(new_image, _id=ObjectId(id))
+
+            return 'Image uploaded', 200
+        except Exception as e:
+            return str(e), 500
+        
+    elif request.method == 'DELETE':
+        try:
+            fs = GridFS(mongo.db, collection='users')
+
+            # Verificar si la imagen existe
+            if not fs.exists(ObjectId(id)):
+                return 'Profile image not found', 404
+
+            # Eliminar la imagen de la base de datos
+            fs.delete(ObjectId(id))
+            db.update_one({'profile_image': ObjectId(id)}, {'$set': {'profile_image': None}})
+
+            return 'Profile image deleted successfully', 200
+
+        except Exception as e:
+            return str(e), 500
     
         
 @users_bp.route('/users/<id>', methods=["DELETE", "PUT"])
