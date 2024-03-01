@@ -36,10 +36,13 @@ def get_profile_image(id):
             fs = GridFS(mongo.db, collection='users')
             image = fs.get(ObjectId(id))
             if image is not None:
-                filename = image.get('filename')
+                filename = image.metadata.get('filename')
                 mimetype = image.content_type
+                if not mimetype:
+                    mimetype, _ = mimetypes.guess_type(filename)
+                
                 if mimetype:
-                    return send_file(image, mimetype = mimetype)
+                    return send_file(image, mimetype=mimetype)
                     #return send_file(image, mimetype = 'image/png')
                 else:
                     return 'Unknown image format', 400
