@@ -1,8 +1,10 @@
 import io
-from flask import Blueprint, jsonify, request, send_file, url_for
+from flask import Blueprint, abort, jsonify, request, send_file, url_for
 from bson import ObjectId
 from gridfs import GridFS
 from pymongo import MongoClient
+import mimetypes
+from werkzeug.utils import secure_filename
 
 users_bp = Blueprint('users', __name__)
 
@@ -34,9 +36,15 @@ def get_profile_image(id):
             fs = GridFS(mongo.db, collection='users')
             image = fs.get(ObjectId(id))
             if image is not None:
-                return send_file(image, mimetype = 'image/png')
+                filename = image.filename
+                mimetype, _ = mimetypes.guess_type(filename)
+                if mimetype:
+                    return send_file(image, mimetype = mimetype)
+                    #return send_file(image, mimetype = 'image/png')
+                else:
+                    return 'Unknown image format', 400
             else:
-                return 'Image not found', 404
+                abort(404)
         except Exception as e:
             return str(e), 500
     elif request.method == "PUT":
@@ -51,8 +59,15 @@ def get_profile_image(id):
             if new_image.filename == '':
                 return 'No selected file', 400
             
+             # Obtener el nombre seguro del archivo
+            filename = secure_filename(new_image.filename)
+
+             # Verificar si se generó un nombre de archivo seguro
+            if filename is None:
+                return 'Invalid filename', 400
+            
             fs.delete(ObjectId(id))
-            new_image_id = fs.put(new_image, _id=ObjectId(id))
+            new_image_id = fs.put(new_image, filename=filename, _id=ObjectId(id), metadata={'filename': filename})
 
             db.update_one({'profile_image': ObjectId(id)}, {'$set': {'profile_image': new_image_id}})
 
