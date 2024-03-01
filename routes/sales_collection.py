@@ -95,9 +95,9 @@ def editsales(id):
     restaurant = mongo.db.restaurants.find_one({"_id": ObjectId(res["id_restaurant"])})
     user = mongo.db.users.find_one({"_id": ObjectId(res["id_user"])})
 
-    recipe = [{"id": str(ObjectId(recipe["_id"])),"title": recipe["title"]}]
-    restaurant = [{"id": str(ObjectId(restaurant["_id"])), "name": restaurant["name"]}]
-    user = [{"id": str(ObjectId(user["_id"])), "name": user["name"]}]
+    recipe = [{"_id": str(ObjectId(recipe["_id"])),"name": recipe["title"]}]
+    restaurant = [{"_id": str(ObjectId(restaurant["_id"])), "name": restaurant["name"]}]
+    user = [{"_id": str(ObjectId(user["_id"])), "name": user["name"]}]
 
     print(res)
     return {"_ID": str(ObjectId(res["_id"])), "date": date_str,

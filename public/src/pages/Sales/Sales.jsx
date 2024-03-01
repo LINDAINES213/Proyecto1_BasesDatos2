@@ -1,19 +1,28 @@
 import { useEffect, useState } from 'react'
 import { buttonContainer, inputContainer, inputText, crud, leftAligned, editButton, scrollableTable,
-  formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit, inputContainerMenu
+  formGrid, buttonContainerOptions, centeredDiv, inputTextSmall, buttonContainerOptionsLimit, inputContainerMenu, inputContainerFirst
  } from './Sales.module.css'
+ import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import { Loading, SelectOption } from '../../components'
 import axios from 'axios'
 
 const Sales = () => {
   const [sales, setSales] = useState([])
+  const [date, setDate] = useState('')
   const [id, setId] = useState(0)
   const [id_recipe, setIdRecipe] = useState('')
+  const [recipe, setRecipe] = useState()
+  const [newRecipe, setNewRecipe] = useState('')
+  const [availableRecipes, setAvailableRecipes] = useState([])
   const [id_restaurant, setIdRestaurant] = useState()
   const [restaurant, setRestaurant] = useState()
   const [newRestaurant, setNewRestaurant] = useState('')
   const [availableRestaurants, setAvailableRestaurants] = useState([])
   const [id_user, setIdUser] = useState('')
+  const [user, setUser] = useState()
+  const [newUser, setNewUser] = useState('')
+  const [availableUsers, setAvailableUsers] = useState([])
   const [quantity, setQuantity] = useState('')
   const [price, setPrice] = useState('')
   const [total, setTotal] = useState('')
@@ -27,6 +36,45 @@ const Sales = () => {
     }
     console.log("id_restaurant",id_restaurant)
   }, [restaurant])
+
+  useEffect(() => {
+    if (date && date !== undefined) {
+      console.log("date",date)
+    }
+  }, [date])
+
+  useEffect(() => {
+    if (recipe && recipe._id !== undefined) {
+      setIdRecipe(recipe._id)
+      axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/restaurantsIds")
+      .then((res) => {
+        console.log("user ",res)
+        res.data.map(restaurant => {
+          if (restaurant._ID === recipe._id){
+            setAvailableRestaurants(restaurant.restaurants)
+          }
+        })
+      })
+      .catch((error) => {
+        console.error('Error fetching restaurants data:', error)
+      })
+    }
+    console.log("id_recipe",id_recipe)
+  }, [recipe])
+
+  useEffect(() => {
+    if (price && price !== undefined && quantity && quantity !== undefined) {
+      setTotal(price*quantity)
+    }
+    console.log("total",total)
+  }, [price, quantity])
+
+  useEffect(() => {
+    if (user && user._id !== undefined) {
+      setIdUser(user._id)
+    }
+    console.log("id_user",id_user)
+  }, [user])
 
   const handleButtonClick = (option) => {
     setSelectedOption(option)
@@ -56,25 +104,37 @@ const Sales = () => {
         setSales(res.data)
         console.log("res", res.data)
         setId(0)
+        setDate('')
         setIdRecipe('')
         setIdRestaurant('')
         setIdUser('')
         setQuantity('')
         setPrice('')
         setTotal('')
+        setRecipe('')
+        setRestaurant('')
+        setUser('')
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
       }).finally(() => {
         setLoading(false)
-        axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/check_restaurantsId")
+        axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/check_recipeId")
         .then((res) => {
-          console.log("restaurantes",res)
-          setAvailableRestaurants(res.data)
-
+          console.log("recipes",res)
+          setAvailableRecipes(res.data)
         })
         .catch((error) => {
           console.error('Error fetching restaurants data:', error)
+        }).finally(()=>{
+          axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/check_usersId")
+          .then((res) => {
+            console.log("user ",res)
+            setAvailableUsers(res.data)
+          })
+          .catch((error) => {
+            console.error('Error fetching restaurants data:', error)
+          })
         })
       })
   }, [])
@@ -82,7 +142,8 @@ const Sales = () => {
   const submit = (event, id) => {
     event.preventDefault()
     if (id === 0) {
-      axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/sales", {
+      axios.post("http://127.0.0.1:5000/sales", {
+      date,
       id_recipe,
       id_restaurant,
       id_user,
@@ -91,7 +152,11 @@ const Sales = () => {
       total,  
       }).then(() => {
         fetchData()
+        setDate('')
         setIdRecipe('')
+        setRecipe('')
+        setRestaurant('')
+        setUser('')
         setIdRestaurant('')
         setRestaurant('')
         setIdUser('')
@@ -101,6 +166,7 @@ const Sales = () => {
       })
     } else {
       axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/sales/${id}`, {
+        date,
         id_recipe,
         id_restaurant,
         id_user,
@@ -109,7 +175,11 @@ const Sales = () => {
         total, 
       }).then(() => {
         fetchData()
+        setDate('')
         setIdRecipe('')
+        setRecipe('')
+        setRestaurant('')
+        setUser('')
         setIdRestaurant('')
         setIdUser('')
         setQuantity('')
@@ -127,14 +197,16 @@ const Sales = () => {
   }
 
   const editusers = (id) => {
-    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editsales/${id}`)
+    axios.get(`http://127.0.0.1:5000/editsales/${id}`)
       .then((res) => {
-        setIdRecipe(),
-        setIdRestaurant(),
-        setIdUser(),
-        setQuantity(),
-        setPrice()
-        setTotal()
+        console.log("edit",res)
+        setDate(res.data.date)
+        setRecipe(res.data.id_recipe[0]),
+        setRestaurant(res.data.id_restaurant[0]),
+        setUser(res.data.id_user[0]),
+        setQuantity(res.data.quantity),
+        setPrice(res.data.price)
+        setTotal(res.data.total)
         setId(res.data._ID)
       })
   }
@@ -205,6 +277,12 @@ const Sales = () => {
       })
   }
 
+  const handleDateChange = (date) => {
+    setDate(date.toISOString().split('T')[0])
+  }
+
+
+
   const renderTable = () => {
     if (loading) {
       console.log("info", sales)
@@ -223,13 +301,25 @@ const Sales = () => {
             <h3>Añadir venta:</h3>
             <form onSubmit={(e) => submit(e, id)}>
               <div className={formGrid}>
-                <div className={inputContainer}>
+                <div className={inputContainerFirst}>
+                  <div style={{marginBottom: '2vh'}}>
                     <i className="material-icons prefix">local_dining</i>
-                    <input className={inputText} value={price} onChange={(e) => setIdRecipe(e.target.value)} type="text" 
-                      placeholder='Receta' />
+                  </div>
+                    <SelectOption
+                      menu={"Receta a seleccionar"}
+                      selectedOption={recipe}
+                      setSelectedOption={setRecipe}
+                      newOption={newRecipe}
+                      setNewOption={setNewRecipe}
+                      availableOptions={availableRecipes}
+                      setAvailableOptions={setAvailableRecipes}
+                      allowAdd={false}
+                  />
                 </div>
                 <div className={inputContainerMenu}>
-                  <i className="material-icons prefix">filter_9_plus</i>
+                  <div style={{marginBottom: '2vh'}}>
+                    <i className="material-icons prefix">filter_9_plus</i>                      
+                  </div>
                   <SelectOption
                       menu={"Restaurante a seleccionar"}
                       selectedOption={restaurant}
@@ -241,27 +331,42 @@ const Sales = () => {
                       allowAdd={false}
                   />
                 </div>
-                <div className={inputContainer}>
+                <div className={inputContainerMenu}>
+                  <div style={{marginBottom: '2vh'}}>
                     <i className="material-icons prefix">wc</i>
-                    <input className={inputText} value={price} onChange={(e) => setIdUser(parseInt(e.target.value,10))} 
-                      type="number" placeholder='Usuario' />
+                  </div>
+                    <SelectOption
+                      menu={"Usuario a seleccionar"}
+                      selectedOption={user}
+                      setSelectedOption={setUser}
+                      newOption={newUser}
+                      setNewOption={setNewUser}
+                      availableOptions={availableUsers}
+                      setAvailableOptions={setAvailableUsers}
+                      allowAdd={false}
+                  />
                 </div>
               </div>
               <div className={formGrid}>
                 <div className={inputContainer}>
                     <i className="material-icons prefix">wc</i>
-                    <input className={inputText} value={price} onChange={(e) => setQuantity(parseInt(e.target.value,10))} 
+                    <input className={inputText} value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value,10))} 
                       type="number" placeholder='Cantidad' />
                 </div>
                 <div className={inputContainer}>
-                    <i className="material-icons prefix">local_offer</i>
-                    <input className={inputText} value={price} onChange={(e) => setPrice(parseInt(e.target.value,10))} 
-                      type="number" placeholder='Precio ($)' />
+                    <i className="material-icons prefix">wc</i>
+                    <DatePicker
+                      selected={date}
+                      onChange={handleDateChange}
+                      className={inputText}
+                      dateFormat="yyyy-MM-dd" // Establece el formato de fecha deseado
+                      placeholderText="Fecha YYYY-MM-DD"
+                    />
                 </div>
                 <div className={inputContainer}>
-                    <i className="material-icons prefix">monetization_on</i>
-                    <input className={inputText} value={total} onChange={(e) => setTotal(parseInt(e.target.value,10))} type="number"
-                        placeholder='Total ($)' />
+                <i className="material-icons prefix">local_offer</i>
+                    <input className={inputText} value={price} onChange={(e) => setPrice(parseInt(e.target.value,10))} 
+                      type="number" placeholder='Precio ($)' />
                     <div className={buttonContainer}>
                         <button className=" btn btn-sm btn-primary waves-effect waves-light right" type="submit" name="action">Enviar 
                             <i className="material-icons right">send</i>

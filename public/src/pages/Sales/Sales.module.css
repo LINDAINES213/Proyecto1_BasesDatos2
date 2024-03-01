@@ -165,6 +165,14 @@ table button {
 .inputContainerMenu {
   display: flex;
   align-items: center;
+  width: 20vw;
+  margin-left: 3vw; 
+}
+
+.inputContainerFirst {
+  display: flex;
+  align-items: center;
+  width: 20vw;
 }
 
 /* Estilos específicos para los íconos dentro de los botones */
@@ -191,7 +199,7 @@ background-color: #f1f1f1; /* Color de fondo de la pista de la barra de desplaza
 }
 
 .formGrid {
-display: grid;
-grid-template-columns: 0.8fr 1fr 2fr; /* La primera columna ocupa 1 parte y la segunda columna ocupa 2 partes */
-gap: 10px; /* Puedes ajustar el espacio entre las columnas según tus necesidades */
+  display: grid;
+  grid-template-columns: 0.8fr 1fr 2fr; /* La primera columna ocupa 1 parte y la segunda columna ocupa 2 partes */
+  gap: 10px; /* Puedes ajustar el espacio entre las columnas según tus necesidades */
 }

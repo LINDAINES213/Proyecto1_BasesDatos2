@@ -4,6 +4,7 @@ import Loading from './Loading'
 import ElementsMenu from './ElementsMenu'
 import ElementsMenuId from './ElementsMenuId'
 import SelectOption from './SelectOption'
+import UserProfileCard from './UserProfileCard'
 
 export {
   Sidebar,
@@ -11,5 +12,6 @@ export {
   Loading,
   ElementsMenu,
   ElementsMenuId,
-  SelectOption
+  SelectOption,
+  UserProfileCard
 }
