@@ -36,7 +36,7 @@ def get_profile_image(id):
             fs = GridFS(mongo.db, collection='users')
             image = fs.get(ObjectId(id))
             if image is not None:
-                filename = image.metadata.get('filename')
+                filename = image.metadata.get('filename') if image.metadata else image.filename
                 mimetype = image.content_type
                 if not mimetype:
                     mimetype, _ = mimetypes.guess_type(filename)
