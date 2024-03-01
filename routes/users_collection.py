@@ -2,6 +2,7 @@ import io
 from flask import Blueprint, jsonify, request, send_file, url_for
 from bson import ObjectId
 from gridfs import GridFS
+from pymongo import MongoClient
 
 users_bp = Blueprint('users', __name__)
 
@@ -28,37 +29,12 @@ def getpost():
 def get_profile_image(id):
     from app import mongo
     try:
-        '''fs = GridFS(mongo.db)
+        fs = GridFS(mongo.db, collection='users')
         image = fs.get(ObjectId(id))
         if image is not None:
             return send_file(image, mimetype = 'image/png')
         else:
-            return 'Image not found', 404'''
-        gridfs_file = mongo.db.fs.files.find_one({'_id': ObjectId(id)})
-        if gridfs_file is None:
             return 'Image not found', 404
-        
-        file_data = b''
-        for chunk in mongo.db.fs.files.find({'_id': ObjectId(id)}):
-            file_data += chunk.get('data', b'')
-
-        image_data = {
-            'filename': gridfs_file['filename'],
-            'chunkSize': gridfs_file.get('chunkSize', ''),
-            'upload_date': gridfs_file.get('uploadDate', ''),
-            'length': gridfs_file.get('length', ''),
-            # Añade más campos según sea necesario
-        }
-
-        # Construye la URL de la imagen
-        image_url = url_for('users.get_profile_image', id=id)
-
-        # Devuelve los datos de la imagen junto con la URL
-        return jsonify({'image_data': image_data, 'image_url': image_url}), 200
-
-        '''response = send_file(io.BytesIO(file_data), mimetype = 'image/png')
-        response.headers['Content-Disposition'] = 'inline; filename=' + gridfs_file['filename']
-        return jsonify({'image_data': image_data, 'image': response}), 200'''
     except Exception as e:
         return str(e), 500
     
