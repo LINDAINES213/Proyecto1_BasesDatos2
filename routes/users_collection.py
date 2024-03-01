@@ -2,7 +2,6 @@ import io
 from flask import Blueprint, abort, jsonify, request, send_file, url_for
 from bson import ObjectId
 from gridfs import GridFS
-from pymongo import MongoClient
 import mimetypes
 from werkzeug.utils import secure_filename
 
@@ -118,7 +117,7 @@ def usersImage():
     from app import mongo
     db = mongo.db.users
     o = []
-    for i in db.find().sort("name", 1):
+    for i in db.find().sort("name", 1).limit(200):
         o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender": i["gender"], "country": i["country"], "contact": i["contact"], "profile_image": str(ObjectId(i["profile_image"]))})
     return jsonify(o)
     
