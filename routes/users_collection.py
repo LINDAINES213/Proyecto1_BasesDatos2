@@ -43,16 +43,18 @@ def get_profile_image(id):
         try:
             fs = GridFS(mongo.db, collection='users')
             
-            if 'image' not in request.file:
+            if 'profile_image' not in request.files:
                 return 'No image provided', 400
             
-            new_image = request.file['image']
+            new_image = request.files['profile_image']
 
             if new_image.filename == '':
                 return 'No selected file', 400
             
             fs.delete(ObjectId(id))
-            fs.put(new_image, _id=ObjectId(id))
+            new_image_id = fs.put(new_image, _id=ObjectId(id))
+
+            db.update_one({'profile_image': ObjectId(id)}, {'$set': {'profile_image': new_image_id}})
 
             return 'Image uploaded', 200
         except Exception as e:
