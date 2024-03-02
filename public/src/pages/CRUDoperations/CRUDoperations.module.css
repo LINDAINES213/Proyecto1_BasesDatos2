@@ -153,8 +153,10 @@ table {
   }
 
 .scrollableTable {
-   max-height: 49vh; 
+   max-height: 49vh;
+   max-width: 80vw; 
    overflow-y: auto;
+   overflow-x: auto;
    border: 2px solid black; /* Añadir un borde negro de 1 píxel */
 }
 

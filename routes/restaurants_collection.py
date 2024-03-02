@@ -14,7 +14,7 @@ def getpost():
             for i in db.find().sort("stars", -1).limit(limit):
                 o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "country":i["country"], "stars":i["stars"], "employees_quantity":i["employees_quantity"]})
         else:
-            for i in db.find().sort("stars", -1).limit(2000):
+            for i in db.find().sort("stars", -1).limit(200):
                 o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "country":i["country"], "stars":i["stars"], "employees_quantity":i["employees_quantity"]})
         return jsonify(o)
     elif request.method == "POST":

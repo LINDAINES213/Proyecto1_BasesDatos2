@@ -30,6 +30,7 @@ h1 {
     max-height: 87vh; 
     width: 82vw;
     overflow-y: auto;
+    align-items: center;
     border: 3px solid black;
     border-radius: 5px;
 }

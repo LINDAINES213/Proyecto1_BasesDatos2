@@ -56,9 +56,9 @@ const chart5 = sdk.createChart({
   return (
     <div className="charts-container">
       <div className="chart" id='chart1'></div>
-      <div className="mid1Chart"  id='chart2'></div>
-      <div className="mid2Chart"  id='chart3'></div>
-      <div className="mid3Chart"  id='chart4'></div>
+      <div className="chart"  id='chart2'></div>
+      <div className="chart"  id='chart3'></div>
+      <div className="chart"  id='chart4'></div>
       <div className="lastChart"  id='chart5'></div>
     </div>
   )
