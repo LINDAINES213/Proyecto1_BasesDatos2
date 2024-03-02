@@ -142,7 +142,7 @@ const Sales = () => {
   const submit = (event, id) => {
     event.preventDefault()
     if (id === 0) {
-      axios.post("http://127.0.0.1:5000/sales", {
+      axios.post("https://proyecto-basesdatos2-uvg.koyeb.app/sales", {
       date,
       id_recipe,
       id_restaurant,
@@ -197,7 +197,7 @@ const Sales = () => {
   }
 
   const editusers = (id) => {
-    axios.get(`http://127.0.0.1:5000/editsales/${id}`)
+    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/editsales/${id}`)
       .then((res) => {
         console.log("edit",res)
         setDate(res.data.date)
@@ -235,7 +235,7 @@ const Sales = () => {
   
   const fetchTotalSalePerRecipe = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/total_sales_per_recipe")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/total_sales_per_recipe")
       .then((res) => {
         setSales(res.data)
       })
@@ -249,7 +249,7 @@ const Sales = () => {
 
   const fetchTotalSalePerRestaurantPerMonth = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/total_sales_per_restaurant_month")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/total_sales_per_restaurant_month")
       .then((res) => {
         console.log("Per Month",res)
         setSales(res.data)
@@ -264,7 +264,7 @@ const Sales = () => {
 
   const fetchTotalSalePerCountry = () => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/sold_recipes_per_country")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/sold_recipes_per_country")
       .then((res) => {
         console.log("Per Country",res)
         setSales(res.data)

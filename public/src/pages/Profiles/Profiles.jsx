@@ -22,7 +22,7 @@ const Profiles = () => {
 
   useEffect(() => {
     setLoading(true)
-    axios.get("http://127.0.0.1:5000/usersImage")
+    axios.get("https://proyecto-basesdatos2-uvg.koyeb.app/usersImage")
       .then((res) => {
         console.log("res", res.data)
         setUsers(res.data)
@@ -41,7 +41,7 @@ const Profiles = () => {
   }, [])
 
   const getImage = ()=> {
-    axios.get(`http://127.0.0.1:5000/usersImage/65e0af3f10b741c51e0d9233`)
+    axios.get(`https://proyecto-basesdatos2-uvg.koyeb.app/usersImage/65e0af3f10b741c51e0d9233`)
       .then((res) => {
         console.log("image", res)
         setUserImage(res.data.image_url)
@@ -55,7 +55,7 @@ const Profiles = () => {
     const formData = new FormData()
     formData.append('profile_image', file)
     setLoading(false)
-    axios.put(`http://127.0.0.1:5000/usersImage/${id}`, formData, {
+    axios.put(`https://proyecto-basesdatos2-uvg.koyeb.app/usersImage/${id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       }
@@ -78,7 +78,7 @@ const Profiles = () => {
         <UserProfileCard
           key={user._ID}
           IDImage={user.profile_image}
-          image={`http://127.0.0.1:5000/usersImage/${user.profile_image}`}
+          image={`https://proyecto-basesdatos2-uvg.koyeb.app/usersImage/${user.profile_image}`}
           name={user.name}
           age={user.age}
           contact={user.contact.email}
