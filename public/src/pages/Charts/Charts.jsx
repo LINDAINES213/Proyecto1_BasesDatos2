@@ -29,10 +29,26 @@ const Charts = () => {
       // Additional options go here
   })
 
+  const chart4 = sdk.createChart({
+    chartId: "65e284a0-79a2-420c-8132-bb50e9a5ca38", // REPLACE with the Chart ID
+    height: "600px",
+    width: "900px",
+    // Additional options go here
+})
+
+const chart5 = sdk.createChart({
+  chartId: "65e28505-ff6b-4c29-847c-37cab4d36e82", // REPLACE with the Chart ID
+  height: "600px",
+  width: "900px",
+  // Additional options go here
+})
+
 
     chart1.render(document.getElementById("chart1"))
     chart2.render(document.getElementById("chart2"))
     chart3.render(document.getElementById("chart3"))
+    chart4.render(document.getElementById("chart4"))
+    chart5.render(document.getElementById("chart5"))
 
     
   }, [])
@@ -40,8 +56,10 @@ const Charts = () => {
   return (
     <div className="charts-container">
       <div className="chart" id='chart1'></div>
-      <div className="midChart"  id='chart2'></div>
-      <div className="lastChart"  id='chart3'></div>
+      <div className="mid1Chart"  id='chart2'></div>
+      <div className="mid2Chart"  id='chart3'></div>
+      <div className="mid3Chart"  id='chart4'></div>
+      <div className="lastChart"  id='chart5'></div>
     </div>
   )
 }
