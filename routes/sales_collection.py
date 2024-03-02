@@ -45,6 +45,7 @@ def getpost():
 
                 o.append({"_ID": str(ObjectId(i["_id"])), "date": datetime.strptime(str(i["date"]), "%Y-%m-%d %H:%M:%S"), "id_recipe": receta, "id_restaurant": restaurante, "id_user": usuario, "quantity":i["quantity"], "price":i["price ($)"], "total":i["total ($)"]})
         else:
+            pipeline.append({"$limit": 2000})
             result = db.aggregate(pipeline)
             for i in result:
                 restaurante = [{"id": str(restaurant["_id"]), "name": restaurant["name"]} for restaurant in i["restaurant_name"]]

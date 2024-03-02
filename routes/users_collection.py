@@ -18,7 +18,7 @@ def getpost():
             for i in db.find().sort("name", 1).limit(limit):
                 o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender":i["gender"], "country":i["country"], "contact":i["contact"]})
         else:
-            for i in db.find().sort("name", 1):
+            for i in db.find().sort("name", 1).limit(2000):
                 o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender": i["gender"], "country": i["country"], "contact": i["contact"]})
         return jsonify(o)
     elif request.method == "POST":
@@ -117,7 +117,7 @@ def usersImage():
     from app import mongo
     db = mongo.db.users
     o = []
-    for i in db.find().sort("name", 1).limit(200):
+    for i in db.find().sort("name", 1).limit(2000):
         o.append({"_ID": str(ObjectId(i["_id"])), "name":i["name"], "age":i["age"], "gender": i["gender"], "country": i["country"], "contact": i["contact"], "profile_image": str(ObjectId(i["profile_image"]))})
     return jsonify(o)
     
