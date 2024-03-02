@@ -43,7 +43,7 @@ height: 80vh;
 .inputText {
   border: 3px solid #ff0000;
   border-radius: 5px; /* Ajusta el valor según sea necesario para obtener el radio deseado */
-  width: 20vw;
+  width: 15vw;
   padding: 5px;
   color: #000000;
   background-color: rgb(255, 255, 255);
@@ -181,7 +181,9 @@ table button i {
 }
 
 .scrollableTable {
- max-height: 49vh; 
+  max-width: 80vw; 
+
+ max-height: 45vh; 
  overflow-y: auto;
  border: 2px solid black; /* Añadir un borde negro de 1 píxel */
 }
